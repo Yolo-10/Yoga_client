@@ -1,0 +1,61 @@
+.c_width{
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.ant-picker-calendar .ant-picker-panel .ant-picker-body{
+  padding-bottom: 0;
+}
+
+.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content{
+  height: 60px;
+}
+
+.ant-picker-calendar .ant-picker-panel .ant-picker-month-panel, .ant-picker-calendar .ant-picker-panel .ant-picker-date-panel{
+  border: 1px solid #b0b0b0;
+  border-radius: 10px;
+}
+
+.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date{
+  border: 0;
+  margin: 0;
+}
+
+table {
+  thead{
+    border-bottom: 1px solid #eee;
+  }
+
+  td + td{
+    border-left: 1px solid #eee;
+  }
+
+  tr + tr{
+    border-top: 1px solid #eee;
+  }
+}
+
+.add_icon{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: #40a9ff;
+  font-size: 32px;
+}
+
+.ant-picker-calendar-header{
+  // 居中显示日期选择器
+  justify-content: center;
+
+  //隐藏月/年模式切换
+  .ant-radio-group{
+    display: none;
+  }
+
+  .ant-select-selection-item{
+    font-weight: 500;
+    font-size: 20px;
+  }
+}
+
