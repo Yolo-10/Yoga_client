@@ -1,12 +1,13 @@
 import type { Moment } from 'moment';
 import { Calendar } from 'antd';
 import AddForm from "../components/AddForm";
+import CPopover from "../components/CPopover";
 import './index.less';
 
 const item = {
   "c_id": 1,
   "c_name": "数据结构",
-  "time": "2022-07-03 15:34:23",
+  "time": "2022-07-03 15:00:00",
   "place": "勤园13-208",
   "nm_money": "188.00",
   "na_money": "200.00",
@@ -14,18 +15,14 @@ const item = {
 }
 
 const IndexPage = () => {
-  const clickItem = (id: Number) => {
-    console.log(id)
-  }
-
   const dateCellRender = (value: Moment) => {
     return value.format('YYYY-MM-DD') === item.time.split(' ')[0] ? (
-      <span className='item' onClick={() => clickItem(item.c_id)}>
-        {item.c_id} {item.c_name}
-      </span >
+      <div>
+        <CPopover item={item} />
+        <CPopover item={item} />
+      </div>
     ) : null;
   };
-
 
   return (
     <div className='c_width'>
