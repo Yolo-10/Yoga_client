@@ -1,47 +1,43 @@
 .c_width{
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   position: relative;
 }
 
-.ant-picker-calendar .ant-picker-panel .ant-picker-body{
-  padding-bottom: 0;
-}
-
-.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content{
-  height: 60px;
-}
-
-.ant-picker-calendar .ant-picker-panel .ant-picker-month-panel, .ant-picker-calendar .ant-picker-panel .ant-picker-date-panel{
-  border: 1px solid #b0b0b0;
-  border-radius: 10px;
-}
-
-.ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date{
-  border: 0;
-  margin: 0;
-}
-
-table {
-  thead{
-    border-bottom: 1px solid #eee;
-  }
-
-  td + td{
-    border-left: 1px solid #eee;
-  }
-
-  tr + tr{
-    border-top: 1px solid #eee;
-  }
-}
-
+//添加按钮
 .add_icon{
   position: absolute;
   top: 12px;
   left: 12px;
   color: #40a9ff;
   font-size: 32px;
+}
+
+.ant-picker-calendar .ant-picker-panel{
+  .ant-picker-body{
+    padding-bottom: 0;
+  }
+  .ant-picker-month-panel, .ant-picker-date-panel{
+    border: 1px solid #b0b0b0;
+    border-radius: 10px;
+  }
+}
+
+.ant-picker-calendar-full .ant-picker-panel{
+  .ant-picker-calendar-date-content{
+    height: 65px ;
+  }
+  .ant-picker-calendar-date{
+    border: 0;
+    margin: 0;
+  }
+}
+
+//月历表的分割线
+table {
+  thead {border-bottom: 1px solid #eee;}
+  td + td {border-left: 1px solid #eee;}
+  tr + tr {border-top: 1px solid #eee;}
 }
 
 .ant-picker-calendar-header{
@@ -53,9 +49,17 @@ table {
     display: none;
   }
 
+  // 日期选择器文字样式
   .ant-select-selection-item{
     font-weight: 500;
     font-size: 20px;
   }
+}
+
+.item{
+  background-color: #1eb05b;
+  color: #fff;
+  padding: 0 5px 0 4px;
+  border-radius: 2px;
 }
 
