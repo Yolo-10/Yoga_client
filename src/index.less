@@ -1,0 +1,183 @@
+@clc_bck:#f1f1f1;
+@clc_blue:#1890ff;
+@clc_border:#eee;
+@clc_grey:#bbb;
+
+.page_main{
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 0 20px;
+
+  .m_body{
+    position: relative;
+
+    //添加按钮
+    .add_icon{
+      position: absolute;
+      top: 12px;
+      left: 0px;
+      color: @clc_blue;
+      font-size: 32px;
+      z-index: 100;
+    }
+  
+    //限定选择框的宽度
+    .ant-picker-calendar-header{
+      display: flex;
+      .ant-picker-calendar-year-select{
+        max-width: 115px;
+      }
+    
+      .ant-picker-calendar-month-select{
+        width:85px;
+      }
+    }
+  
+    //限制月历中每格日期的样式
+    .ant-picker-calendar-full .ant-picker-panel{
+      .ant-picker-calendar-date-content{
+        height: 65px ;
+      }
+      .ant-picker-calendar-date{
+        border: 0;
+        margin: 0;
+      }
+    }
+    
+    table {
+      // 月历表的外框
+      border-radius: 10px;
+      border-style: hidden;
+      box-shadow: 0 0 0 1px @clc_border;
+      
+      //月历表的分割线
+      thead {
+        border-bottom: 1px solid @clc_border;
+    
+        &>tr{height: 32px;}
+      }
+      td + td {border-left: 1px solid @clc_border;}
+      tr + tr {border-top: 1px solid @clc_border;}
+    }
+    
+    .ant-picker-calendar-header{
+      // 居中显示日期选择器
+      justify-content: center;
+    
+      //隐藏月/年模式切换
+      .ant-radio-group{
+        display: none;
+      }
+    
+      // 日期选择器文字样式
+      .ant-select-selection-item{
+        font-weight: 500;
+        font-size: 20px;
+      }
+    
+      &>div{
+        width: 200px;
+      }
+    }
+  }
+  
+  //图标
+  .item{
+  max-width: 32px;
+  width: 100%;
+  display: inline-block;
+
+  &>img{
+    width: 100%;
+  }
+
+  &+.item{
+    margin-top: 1px;
+  }
+}
+}
+
+.page_dea{
+  // max-width: 1000px;
+  margin: 20px auto;
+
+  ul{
+    margin: 0;
+  }
+  li{
+    list-style: none;
+  }
+  .today{
+    color: #87da87;
+  }
+  .active{
+    cursor: not-allowed;
+  }
+
+  .m_basic{
+    padding: 0 20px;
+    margin: 20px 0;
+    font-size: 16px;
+  }
+
+  .m_list{
+    &>div:first-child{
+      background-color: @clc_bck;
+      height: 30px;
+      line-height: 30px;
+      color: @clc_grey;
+      padding: 0 10px;
+    }
+  }
+
+  .list_hd{
+    display: flex;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 5px;
+
+    color: @clc_blue;
+    border-radius: 3px;
+  }
+
+  .list_bd{
+    margin: 5px 0;
+  }
+
+  .list_item{
+    display: flex;
+    padding: 0 5px;
+    height: 25px;
+    font-size: 14px;
+
+    &+.list_item{
+      margin-top: 5px;
+    }
+  }
+
+  .list_hd,.list_item{
+    &>li{text-align: center;}
+    li:nth-child(1){width: 10%;}
+    li:nth-child(2){width: 32%;}
+    li:nth-child(3){width: 12%;}
+    li:nth-child(4){width: 32%;}
+    li:nth-child(5){
+      width: 16%;
+      &>button{
+        text-align: center;
+        background-color: #fff;
+        border: 1px solid rgb(0, 0, 0,0.85);
+        color: #000;
+        outline: none;
+      }
+    }
+  }
+}
+
+
+//移动端效果
+@media only screen and (max-width: 480px){
+  .ant-drawer-content-wrapper{
+      width:100% !important;
+  }
+}  

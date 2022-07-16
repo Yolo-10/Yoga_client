@@ -5,7 +5,12 @@ export default defineConfig({
     type: 'none',
   },
   routes: [
-    { path: '/', component: '@/pages/index' },
+    {
+      path: '/', component: '@/layouts', routes: [
+        { path: '/', component: '@/pages/index' },
+        { path: '/dea', component: '@/pages/dea' },
+      ]
+    }
   ],
   fastRefresh: {},
   locale: {
