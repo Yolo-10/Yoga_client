@@ -1,6 +1,6 @@
 @clc_bck:#f1f1f1;
 @clc_blue:#1890ff;
-@clc_border:#eee;
+@clc_border:#e1e1e1;
 @clc_grey:#bbb;
 
 .page_main{
@@ -99,6 +99,7 @@
 
 .page_dea{
   // max-width: 1000px;
+  min-width: 300px;
   margin: 20px auto;
 
   ul{
@@ -108,10 +109,11 @@
     list-style: none;
   }
   .today{
-    color: #87da87;
+    color: #bababa;
   }
   .active{
-    cursor: not-allowed;
+    background-color: #e7e7e7;
+    color: #b7b7b7;
   }
 
   .m_basic{
@@ -132,8 +134,6 @@
 
   .list_hd{
     display: flex;
-    height: 30px;
-    line-height: 30px;
     padding: 0 5px;
 
     color: @clc_blue;
@@ -147,8 +147,7 @@
   .list_item{
     display: flex;
     padding: 0 5px;
-    height: 25px;
-    font-size: 14px;
+    font-size: .9375rem;
 
     &+.list_item{
       margin-top: 5px;
@@ -156,19 +155,15 @@
   }
 
   .list_hd,.list_item{
-    &>li{text-align: center;}
-    li:nth-child(1){width: 10%;}
-    li:nth-child(2){width: 32%;}
-    li:nth-child(3){width: 12%;}
-    li:nth-child(4){width: 32%;}
-    li:nth-child(5){
-      width: 16%;
-      &>button{
-        text-align: center;
-        background-color: #fff;
-        border: 1px solid rgb(0, 0, 0,0.85);
-        color: #000;
-        outline: none;
+    &>li{text-align: center;display: block;}
+    li:nth-child(1){width: 26%;}
+    li:nth-child(2){width: 16%;}
+    li:nth-child(3){width: 40%;}
+    li:nth-child(4){
+      width: 18%;
+      &>.ant-btn{
+        height: 25px;
+        padding: 1px 4px;
       }
     }
   }

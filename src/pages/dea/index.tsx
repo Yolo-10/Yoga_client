@@ -14,38 +14,38 @@ const item = {
 }
 
 const u_list = [{
-  "u_id": "2017321909393",
+  "u_id": "201732190",
   "u_name": "张三",
   "appo_time": "2022-07-12 14:00",
   "cost": "188.00"
 }, {
-  "u_id": "2017331909394",
+  "u_id": "201433190",
   "u_name": "李四",
   "appo_time": "2022-07-12 15:00",
   "cost": "188.00"
 }, {
-  "u_id": "2012321909393",
+  "u_id": "201332190",
   "u_name": "张三",
   "appo_time": "2022-07-13 15:30",
   "cost": "188.00"
 }, {
-  "u_id": "2017321904394",
+  "u_id": "201742190",
   "u_name": "王五",
   "appo_time": "2022-07-14 17:00",
   "cost": "188.00"
 }, {
-  "u_id": "2017323909393",
+  "u_id": "201732390",
   "u_name": "张章",
   "appo_time": "2022-07-15 18:00",
   "cost": "188.00"
 }, {
-  "u_id": "2017321909394",
+  "u_id": "201732190",
   "u_name": "李粒",
   "appo_time": "2022-07-16 12:00",
   "cost": "200.00"
 }, {
-  "u_id": "2017321909394",
-  "u_name": "倪浩",
+  "u_id": "201732190",
+  "u_name": "倪浩浩",
   "appo_time": "2022-07-16 14:00",
   "cost": "200.00"
 },]
@@ -65,7 +65,6 @@ export default function dea() {
       <div className="m_list">
         <div>报名列表</div>
         <ul className='list_hd'>
-          <li>序号</li>
           <li>用户工号</li>
           <li>用户名</li>
           <li>报名时间</li>
@@ -79,7 +78,6 @@ export default function dea() {
       <div className="m_list">
         <div>报名列表</div>
         <ul className='list_hd'>
-          <li>序号</li>
           <li>用户工号</li>
           <li>用户名</li>
           <li>报名时间</li>
@@ -89,7 +87,6 @@ export default function dea() {
           {u_list.map((u_item, i) =>
             <ul className={item.time.split(' ')[0] === u_item.appo_time.split(' ')[0] ?
               "list_item  today" : "list_item"} key={i}>
-              <li>{i + 1}</li>
               <li>{u_item.u_id}</li>
               <li>{u_item.u_name}</li>
               <li>{u_item.appo_time}</li>
@@ -101,7 +98,6 @@ export default function dea() {
       <div className="m_list">
         <div>违约名单</div>
         <ul className='list_hd'>
-          <li>序号</li>
           <li>用户工号</li>
           <li>用户名</li>
         </ul>
@@ -109,7 +105,6 @@ export default function dea() {
           {u_list.map((u_item, i) =>
             <ul className={item.time.split(' ')[0] === u_item.appo_time.split(' ')[0] ?
               "list_item  today" : "list_item"} key={i}>
-              <li>{i + 1}</li>
               <li>{u_item.u_id}</li>
               <li>{u_item.u_name}</li>
             </ul>
