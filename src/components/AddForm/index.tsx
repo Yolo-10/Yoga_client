@@ -1,10 +1,13 @@
+import {
+  Button, Radio, Col, DatePicker,
+  Drawer, Form, Input, Row, TimePicker
+} from 'antd';
+import type { DatePickerProps } from 'antd';
 import { useState } from 'react'
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Space } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+
 
 const AddForm = () => {
   const [visible, setVisible] = useState(false);
-  const RangePicker: any = DatePicker.RangePicker;
   const showDrawer = () => {
     setVisible(true);
   };
@@ -12,57 +15,53 @@ const AddForm = () => {
     setVisible(false);
   };
 
+  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+    console.log(date, dateString);
+  };
 
   return (
     <div>
-      <PlusCircleOutlined className='add_icon' onClick={showDrawer} />
+      <Button className='add_icon' onClick={showDrawer}>添加</Button>
       <Drawer
-        title="新增课程"
+        title="课程"
         width={'417'}
         onClose={onClose}
-        visible={visible}
-        extra={
-          <Space>
-            <Button onClick={onClose}>取消</Button>
-            <Button onClick={onClose} type="primary">提交</Button>
-          </Space>
-        }
-      >
+        visible={visible}>
         <Form layout="vertical" hideRequiredMark>
           <Col span={24}>
             <Form.Item
-              name="c_id"
-              label="课程id"
-              rules={[{ required: true, message: '请输入课程id' }]}>
-              <Input placeholder="请输入课程id" />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item
               name="c_name"
-              label="课程名"
-              rules={[{ required: true, message: '请输入课程名' }]}>
-              <Input placeholder="请输入课程名" />
+              label="课程"
+              rules={[{ required: true }]}>
+              <Radio.Group buttonStyle="solid">
+                <Radio.Button value="yoga" >瑜伽</Radio.Button>
+                <Radio.Button value="b">围棋</Radio.Button>
+                <Radio.Button value="c">羽毛球</Radio.Button>
+              </Radio.Group>
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               name="time"
-              label="上课时间"
-              rules={[{ required: true, message: '请输入上课时间' }]}>
-              <RangePicker
-                showTime={{ format: 'HH:mm' }}
-                format="YYYY-MM-DD HH:mm"
-              />
+              label="时间"
+              rules={[{ required: true, message: '请输入时间' }]}>
+              <div style={{ 'display': 'flex' }}>
+                <DatePicker
+                  onChange={onChange}
+                  format="YYYY-MM-DD" />
+                <TimePicker.RangePicker
+                  minuteStep={30}
+                  format='HH:mm' />
+              </div>
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               name="place"
-              label="上课地点"
-              rules={[{ required: true, message: '请输入上课地点' }]}
+              label="地点"
+              rules={[{ required: true, message: '请输入地点' }]}
             >
-              <Input placeholder="请输入上课地点" />
+              <Input placeholder="请输入地点" />
             </Form.Item>
           </Col>
           <Row gutter={10}>
@@ -86,12 +85,14 @@ const AddForm = () => {
           <Col span={24}>
             <Form.Item
               name="p_limit"
-              label="课程人数"
+              label="人数"
               rules={[{ required: true, message: '请输入课程人数' }]}>
-              <Input placeholder="请输入课程人数" />
+              <Input placeholder="请输入人数" />
             </Form.Item>
           </Col>
         </Form>
+
+        <Button onClick={onClose} type="primary">提交</Button>
       </Drawer>
     </div>
 

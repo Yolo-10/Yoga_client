@@ -1,13 +1,19 @@
-@clc_bck:#f1f1f1;
 @clc_blue:#1890ff;
 @clc_border:#e1e1e1;
-@clc_grey:#bbb;
 
-.page_main{
+.page_init{
+  box-sizing: border-box;
   max-width: 1000px;
-  margin: 20px auto;
-  padding: 0 20px;
+  margin: 0px auto;
 
+  //alert头部信息
+  .ant-alert-message > div {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1rem;
+  }
+
+  //头部以下内容
   .m_body{
     position: relative;
 
@@ -15,28 +21,30 @@
     .add_icon{
       position: absolute;
       top: 12px;
-      left: 0px;
-      color: @clc_blue;
-      font-size: 32px;
+      right: 0;
+      background-color: @clc_blue;
+      color: #fff;
+      border: 0;
       z-index: 100;
     }
-  
+
     //限定选择框的宽度
     .ant-picker-calendar-header{
       display: flex;
       .ant-picker-calendar-year-select{
-        max-width: 115px;
+        max-width: 110px;
       }
     
       .ant-picker-calendar-month-select{
         width:85px;
       }
     }
-  
+
     //限制月历中每格日期的样式
     .ant-picker-calendar-full .ant-picker-panel{
       .ant-picker-calendar-date-content{
-        height: 65px ;
+        // height: 65px ;
+        height: calc((100vh - 330px) / 6);
       }
       .ant-picker-calendar-date{
         border: 0;
@@ -54,7 +62,10 @@
       thead {
         border-bottom: 1px solid @clc_border;
     
-        &>tr{height: 32px;}
+        &>tr{
+          height: 32px;
+          th+th{border-left:1px solid @clc_border ;}
+        }
       }
       td + td {border-left: 1px solid @clc_border;}
       tr + tr {border-top: 1px solid @clc_border;}
@@ -62,7 +73,7 @@
     
     .ant-picker-calendar-header{
       // 居中显示日期选择器
-      justify-content: center;
+      justify-content: start;
     
       //隐藏月/年模式切换
       .ant-radio-group{
@@ -80,98 +91,26 @@
       }
     }
   }
-  
+ 
   //图标
   .item{
-  max-width: 32px;
-  width: 100%;
-  display: inline-block;
-
-  &>img{
+    max-width: 32px;
     width: 100%;
-  }
+    display: inline-block;
 
-  &+.item{
-    margin-top: 1px;
-  }
-}
-}
-
-.page_dea{
-  // max-width: 1000px;
-  min-width: 300px;
-  margin: 20px auto;
-
-  ul{
-    margin: 0;
-  }
-  li{
-    list-style: none;
-  }
-  .today{
-    color: #bababa;
-  }
-  .active{
-    background-color: #e7e7e7;
-    color: #b7b7b7;
-  }
-
-  .m_basic{
-    padding: 0 20px;
-    margin: 20px 0;
-    font-size: 16px;
-  }
-
-  .m_list{
-    &>div:first-child{
-      background-color: @clc_bck;
-      height: 30px;
-      line-height: 30px;
-      color: @clc_grey;
-      padding: 0 10px;
+    &>img{
+      width: 100%;
     }
-  }
 
-  .list_hd{
-    display: flex;
-    padding: 0 5px;
-
-    color: @clc_blue;
-    border-radius: 3px;
-  }
-
-  .list_bd{
-    margin: 5px 0;
-  }
-
-  .list_item{
-    display: flex;
-    padding: 0 5px;
-    font-size: .9375rem;
-
-    &+.list_item{
-      margin-top: 5px;
-    }
-  }
-
-  .list_hd,.list_item{
-    &>li{text-align: center;display: block;}
-    li:nth-child(1){width: 26%;}
-    li:nth-child(2){width: 16%;}
-    li:nth-child(3){width: 40%;}
-    li:nth-child(4){
-      width: 18%;
-      &>.ant-btn{
-        height: 25px;
-        padding: 1px 4px;
-      }
+    &+.item{
+      margin-top: 1px;
     }
   }
 }
 
 
 //移动端效果
-@media only screen and (max-width: 480px){
+@media only screen and (max-width: 600px){
   .ant-drawer-content-wrapper{
       width:100% !important;
   }

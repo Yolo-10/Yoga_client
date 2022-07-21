@@ -6,12 +6,8 @@ export default defineConfig({
   },
   exportStatic: {},
   routes: [
-    {
-      path: '/', component: '@/layouts', routes: [
-        { path: '/', component: '@/pages/index' },
-        { path: '/dea', component: '@/pages/dea' },
-      ]
-    }
+    { path: '/', component: '@/pages/init' },
+    { path: '/dea', component: '@/pages/dea' },
   ],
   fastRefresh: {},
   locale: {

@@ -1,7 +1,7 @@
-import React from 'react'
-import { Button, message, Popconfirm } from 'antd'
-import { useState } from 'react'
+import { Alert } from 'antd'
 import Item from '../../components/Item'
+import yogaImg from '../../img/瑜伽.svg'
+import './index.less'
 
 const item = {
   "c_id": 1,
@@ -54,20 +54,24 @@ export default function dea() {
 
   return (
     <div className='page_dea'>
-      <div className="m_basic">
-        <div>课程名：{item.c_name}</div>
-        <div>上课时间：{item.time}</div>
-        <div>上课地点：{item.place}</div>
-        <div>普通金额：{item.nm_money}</div>
-        <div>非预约金额：{item.na_money}</div>
-        <div>人数限制：{item.p_limit}</div>
-      </div>
+      <Alert message={
+        <div>
+          <span>{item.time.substring(5)}</span>
+          <span>{item.place}</span>
+        </div>}
+        icon={
+          <div className='item'>
+            <img src={yogaImg} alt="" />
+          </div >}
+        showIcon >
+      </Alert >
+
       <div className="m_list">
         <div>报名列表</div>
         <ul className='list_hd'>
-          <li>用户工号</li>
           <li>用户名</li>
           <li>报名时间</li>
+          <li>缴费金额</li>
           <li>黑名单</li>
         </ul>
         <div className="list_bd">
@@ -78,10 +82,10 @@ export default function dea() {
       <div className="m_list">
         <div>报名列表</div>
         <ul className='list_hd'>
-          <li>用户工号</li>
           <li>用户名</li>
           <li>报名时间</li>
           <li>缴费金额</li>
+          <li>黑名单</li>
         </ul>
         <div className="list_bd">
           {u_list.map((u_item, i) =>
