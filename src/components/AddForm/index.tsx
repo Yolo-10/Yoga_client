@@ -91,7 +91,7 @@ const AddForm = (props: any) => {
               label="上课时间"
               name="began_time">
               <TimePicker minuteStep={30} format={'HH:mm'}
-                showNow={false} style={{ 'imeMode': 'disabled' }} />
+                showNow={false} inputReadOnly />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -111,16 +111,16 @@ const AddForm = (props: any) => {
             </Form.Item>
           </Col>
           <Row gutter={10}>
-            <Col span={12}>
+            <Col span={16}>
               <Form.Item
                 name="nm_money"
-                label="普通金额（300 ~ 500）"
+                label="普通金额（300元 ~ 500元）"
                 rules={[{ required: true, message: '请输入普通金额' }]}>
                 <InputNumber min={300} max={500} controls={false}
-                  addonBefore={reduceIcon1} addonAfter={addIcon1} />
+                  addonBefore={reduceIcon1} addonAfter={addIcon1} readOnly />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Form.Item
                 name="na_money"
                 label="非预约金额"
@@ -136,7 +136,7 @@ const AddForm = (props: any) => {
               rules={[{ required: true, message: '请输入课程人数' }]}>
               <InputNumber min={5} max={12} controls={false}
                 addonBefore={reduceIcon2} addonAfter={addIcon2}
-                style={{ 'width': 100 + 'px' }} />
+                style={{ 'width': 200 + 'px' }} readOnly />
             </Form.Item>
           </Col>
         </Form>

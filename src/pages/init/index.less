@@ -4,13 +4,15 @@
 .page_init{
   box-sizing: border-box;
   max-width: 1000px;
+  min-width: 280px;
   margin: 0px auto;
+  height: 100vh;
 
   //alert头部信息
   .ant-alert-message > div {
     display: flex;
     justify-content: space-around;
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   //头部以下内容
@@ -21,7 +23,7 @@
     .add_icon{
       position: absolute;
       top: 12px;
-      right: 0;
+      right: 2px;
       background-color: @clc_blue;
       color: #fff;
       border: 0;
@@ -36,11 +38,13 @@
     .ant-picker-calendar-header{
       display: flex;
       .ant-picker-calendar-year-select{
-        max-width: 110px;
+        max-width: 130px;
+        text-align: center;
       }
     
       .ant-picker-calendar-month-select{
-        width:85px;
+        max-width: 100px;
+        text-align: center;
       }
     }
 
@@ -119,6 +123,12 @@
       width:100% !important;
   }
 }  
+
+
+//抽屉
+.ant-drawer-body{
+  padding: 24px 24px 0;
+}
 
 
 .ant-form-item-label > label{

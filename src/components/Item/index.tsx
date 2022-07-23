@@ -11,7 +11,7 @@ export default function Item(props: any) {
 
   return (
     <ul className={today === u_item.appo_time.split(' ')[0] ?
-      "list_item  green" : "list_item"} >
+      "list_item green" : "list_item"} >
       <li>{u_item.u_name}</li>
       <li>{u_item.appo_time.substr(5)}</li>
       <li>{u_item.cost}</li>

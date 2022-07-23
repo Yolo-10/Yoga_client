@@ -1,7 +1,9 @@
-import { Alert, Divider } from 'antd'
+import { Alert } from 'antd'
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import Item from '../../components/Item'
 import yogaImg from '../../img/瑜伽.svg'
 import './index.less'
+import { history } from 'umi';
 
 const item = {
   "c_name": "瑜伽",
@@ -43,12 +45,15 @@ const u_list = [{
 },]
 
 export default function dea() {
+  const returnBefore = () => {
+    history.go(-1);
+  }
 
   return (
     <div className='page_dea'>
       <header>
-        <div className='ico_arrow'></div>
-        <div>课程详情</div>
+        <ArrowLeftOutlined onClick={returnBefore} />
+        <span>课程详情</span>
       </header>
       <Alert message={
         <div>

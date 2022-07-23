@@ -20,15 +20,26 @@
   }
 
 
+  //课程详情
   header{
-    &>.ico_arrow{
-      width: 0;
-      height: 0;
-      border-left: 5px solid #000;
-      border-top: 5px solid #000;
-      border-bottom: 5px solid transparent;
-      border-right: 5px solid transparent;
-      transform: rotate(45);
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+
+    //箭头
+    &>:nth-child(1){
+      margin-left: 5px;
+    }
+
+    //字段
+    &>:nth-child(2){
+      width: 100px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      position: absolute;
+      left: 50%;
+      margin: 0 0 0 -50px ;
+      text-align: center;
     }
   }
 
@@ -39,6 +50,7 @@
     font-size: 0.9rem;
   }
 
+  //头部基本信息2行
   .hd_des{
     display: flex;
     height: 36px;
@@ -62,7 +74,7 @@
     padding: 5px;
     font-size: 0.9rem;
 
-    color: #1890ff;
+    // color: #1890ff;
     border-radius: 3px;
   }
 
