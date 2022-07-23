@@ -10,7 +10,7 @@ const item = {
   "time": "2022-07-16 17:00-18:30",
   "place": "师生活动中心2-108",
   "nm_money": "400",
-  "na_money": "40",
+  "na_money": "40.00",
   "p_limit": 50
 }
 
@@ -72,7 +72,6 @@ export default function dea() {
         <div>非预约金额：{item.na_money}</div>
         <div>人数：{item.p_limit}</div>
       </div>
-
       <div>
         <ul className='list_hd'>
           <li>学员</li>
