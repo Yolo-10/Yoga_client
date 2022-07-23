@@ -1,9 +1,11 @@
 import type { Moment } from 'moment';
+import moment from 'moment';
 import { Calendar, Alert } from 'antd';
 import { Link } from 'umi';
 import AddForm from "../../components/AddForm";
 import yogaImg from '../../img/瑜伽.svg'
 import './index.less'
+import { useState } from 'react';
 
 const item = {
   "c_id": 1,
@@ -16,12 +18,22 @@ const item = {
 }
 
 const IndexPage = () => {
+  const [canAdd, setCanAdd] = useState(true);
+
   const dateCellRender = (value: Moment) => {
-    return value.format('YYYY-MM-DD') === item.time.split(' ')[0] ? (
+    return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ? (
       <Link className='item' to={`/dea?c_id=${item.c_id}`}>
         {item.c_name === '瑜伽' ? <img src={yogaImg} alt="" /> : ""}
       </Link>
     ) : null;
+  };
+
+  const calChange = (value: Moment) => {
+    if (value.isSame(moment(), "day")) {
+      setCanAdd(true);
+      return;
+    }
+    value.isAfter(moment()) ? setCanAdd(true) : setCanAdd(false);
   };
 
   return (
@@ -33,8 +45,8 @@ const IndexPage = () => {
       </Alert >
 
       <div className="m_body">
-        <AddForm />
-        <Calendar dateCellRender={dateCellRender} />
+        <AddForm canAdd={canAdd} />
+        <Calendar dateCellRender={dateCellRender} onChange={calChange} />
       </div>
     </div >
   )

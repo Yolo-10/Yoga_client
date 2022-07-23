@@ -4,8 +4,7 @@
 @clc_grey:#bbb;
 
 .page_dea{
-  min-width: 300px;
-  margin: 20px auto;
+  margin: 0 auto;
 
   ul{
     margin: 0;
@@ -13,33 +12,55 @@
   li{
     list-style: none;
   }
-  .today{
-    color: #bababa;
+  .green{
+    color: #3eb645;
   }
-  .active{
-    background-color: #e7e7e7;
-    color: #b7b7b7;
-  }
-
-  .m_basic{
-    padding: 0 20px;
-    margin: 20px 0;
-    font-size: 16px;
+  .red{
+    color: #f00;
   }
 
-  .m_list{
-    &>div:first-child{
-      background-color: @clc_bck;
-      height: 30px;
-      line-height: 30px;
-      color: @clc_grey;
-      padding: 0 10px; 
-    } 
+
+  header{
+    &>.ico_arrow{
+      width: 0;
+      height: 0;
+      border-left: 5px solid #000;
+      border-top: 5px solid #000;
+      border-bottom: 5px solid transparent;
+      border-right: 5px solid transparent;
+      transform: rotate(45);
+    }
+  }
+
+  //alert头部信息
+  .ant-alert-message > div {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.9rem;
+  }
+
+  .hd_des{
+    display: flex;
+    height: 36px;
+    line-height: 36px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #91d5ff;
+
+    >div{
+      flex-grow: 1;
+      text-align: center;
+      background-color: #e6f7ff;
+
+      +div{
+        border-left: 1px solid #91d5ff;
+      }
+    }
   }
 
   .list_hd{
     display: flex;
-    padding: 0 5px;
+    padding: 5px;
+    font-size: 0.9rem;
 
     color: #1890ff;
     border-radius: 3px;
@@ -53,6 +74,7 @@
     display: flex;
     padding: 0 5px;
     font-size: .9375rem;
+    min-height: 36px;
 
     &+.list_item{
       margin-top: 5px;
@@ -60,16 +82,10 @@
   }
 
   .list_hd,.list_item{
-    &>li{text-align: center;display: block;}
-    li:nth-child(1){width: 26%;}
-    li:nth-child(2){width: 16%;}
-    li:nth-child(3){width: 40%;}
-    li:nth-child(4){
-      width: 18%;
-      &>.ant-btn{
-        height: 25px;
-        padding: 1px 4px;
-      }
+    &>li{
+      text-align: center;
+      display: block;
+      width: 25%;
     }
   }
 
