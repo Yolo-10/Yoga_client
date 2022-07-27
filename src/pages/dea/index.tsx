@@ -1,5 +1,5 @@
 import { Alert } from 'antd'
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 import Item from '../../components/Item'
 import yogaImg from '../../img/瑜伽.svg'
 import './index.less'
@@ -9,9 +9,9 @@ const item = {
   "c_name": "瑜伽",
   "time": "2022-07-16 17:00-18:30",
   "place": "师生活动中心2-108",
-  "nm_money": "400",
-  "na_money": "40.00",
-  "p_limit": 50
+  "nm_money": "40.00",
+  "na_money": "60.00",
+  "p_limit": 10
 }
 
 const u_list = [{
@@ -52,7 +52,7 @@ export default function dea() {
   return (
     <div className='page_dea'>
       <header>
-        <ArrowLeftOutlined onClick={returnBefore} />
+        <LeftOutlined onClick={returnBefore} />
         <span>课程详情</span>
       </header>
       <Alert message={

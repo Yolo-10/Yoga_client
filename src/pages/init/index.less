@@ -7,6 +7,7 @@
   min-width: 280px;
   margin: 0px auto;
   height: 100vh;
+  padding: 20px;
 
   //alert头部信息
   .ant-alert-message > div {
@@ -23,11 +24,13 @@
     .add_icon{
       position: absolute;
       top: 12px;
-      right: 2px;
+      right: 0;
       background-color: @clc_blue;
       color: #fff;
       border: 0;
       z-index: 100;
+      height: 45px;
+      font-size: 21px;
     }
 
     .cannot_add{
@@ -52,7 +55,7 @@
     .ant-picker-calendar-full .ant-picker-panel{
       .ant-picker-calendar-date-content{
         // height: 65px ;
-        height: calc((100vh - 330px) / 6);
+        height: calc((100vh - 370px) / 6);
       }
       .ant-picker-calendar-date{
         border: 0;
@@ -87,11 +90,17 @@
       .ant-radio-group{
         display: none;
       }
+
+      .ant-select-selector{
+        height: 45px;
+      }
     
       // 日期选择器文字样式
       .ant-select-selection-item{
         font-weight: 500;
-        font-size: 20px;
+        font-size: 24px;
+        height: 45px;
+        line-height: 45px;
       }
     
       &>div{
@@ -127,11 +136,55 @@
 
 //抽屉
 .ant-drawer-body{
-  padding: 24px 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px;
+
+  >.btn_ope{
+    display: flex;
+
+    &>button{
+      flex:1;
+      height: 45px;
+    }
+  }
 }
 
+//隐藏 X 号
+.ant-drawer-header-title>button{
+  display: none;
+}
 
 .ant-form-item-label > label{
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+//课程选择、时长撑满父组件
+.ant-radio-group{
+  display: flex;
+
+  &>label{
+    flex: 1;
+    text-align: center;
+    height: 45px;
+    line-height: 45px;
+  }
+}
+
+//普通金额、人数居中
+.ant-input-number-input-wrap>input{
+  text-align: center;
+  height: 45px;
+}
+
+.ant-picker{
+  width: 100%;
+  height: 45px;
+}
+
+.ant-input-affix-wrapper{
+  width: 100%;
+  height: 45px;
 }

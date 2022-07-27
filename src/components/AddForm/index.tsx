@@ -3,7 +3,6 @@ import {
   Drawer, Form, Input, Row, InputNumber, Slider
 } from 'antd';
 import { useState } from 'react'
-import type { SliderMarks } from 'antd/es/slider';
 import moment from 'moment';
 
 
@@ -22,7 +21,7 @@ const AddForm = (props: any) => {
     let { [who]: before } = form.getFieldsValue();  //变量key
     let newValue = add ? before + step : before - step;
     if (newValue > maxV || newValue < minV) {
-      message.error(`超过 ${minV} ~ ${maxV} 范围`);
+      message.error(`超过既定范围`);
       return;
     }
     form.setFieldsValue({ [(() => who)()]: newValue })
@@ -46,12 +45,6 @@ const AddForm = (props: any) => {
   const reduceIcon2 = (
     <div onClick={() => (changeNumber('p_limit', false, 1, 5, 12))}>-</div>)
 
-  //滑动条的数值提示
-  const timeMarks: SliderMarks = {
-    60: '60',
-    90: '90',
-    120: '120',
-  }
 
   return (
     <div>
@@ -98,7 +91,13 @@ const AddForm = (props: any) => {
             <Form.Item
               label="时长(分钟)"
               name="time_step">
-              <Slider step={30} min={60} max={120} marks={timeMarks} />
+              <Radio.Group buttonStyle="solid">
+                <Radio.Button value="60" >60</Radio.Button>
+                <Radio.Button value="90">90</Radio.Button>
+                <Radio.Button value="120">120</Radio.Button>
+                <Radio.Button value="150">150</Radio.Button>
+                <Radio.Button value="180">180</Radio.Button>
+              </Radio.Group>
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -110,38 +109,32 @@ const AddForm = (props: any) => {
               <Input placeholder="请输入地点" allowClear={true} />
             </Form.Item>
           </Col>
-          <Row gutter={10}>
-            <Col span={16}>
+          <Row gutter={20}>
+            <Col span={12}>
               <Form.Item
                 name="nm_money"
-                label="普通金额（300元 ~ 500元）"
+                label="普通金额(300~500)"
                 rules={[{ required: true, message: '请输入普通金额' }]}>
                 <InputNumber min={300} max={500} controls={false}
                   addonBefore={reduceIcon1} addonAfter={addIcon1} readOnly />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Form.Item
-                name="na_money"
-                label="非预约金额"
-                rules={[{ required: true, message: '请输入非预约金额' }]}>
-                <Input placeholder="请输入非预约金额" readOnly style={{ 'border': '0' }} />
+                name="p_limit"
+                label="人数(5~12)"
+                rules={[{ required: true, message: '请输入课程人数' }]}>
+                <InputNumber min={5} max={12} controls={false}
+                  addonBefore={reduceIcon2} addonAfter={addIcon2} readOnly />
               </Form.Item>
             </Col>
           </Row>
-          <Col span={24}>
-            <Form.Item
-              name="p_limit"
-              label="人数（5 ~ 12）"
-              rules={[{ required: true, message: '请输入课程人数' }]}>
-              <InputNumber min={5} max={12} controls={false}
-                addonBefore={reduceIcon2} addonAfter={addIcon2}
-                style={{ 'width': 200 + 'px' }} readOnly />
-            </Form.Item>
-          </Col>
         </Form>
 
-        <Button onClick={onClose} type="primary" style={{ 'float': 'right' }}>提交</Button>
+        <div className='btn_ope'>
+          <Button onClick={onClose} style={{ 'float': 'left' }}>取消</Button>
+          <Button onClick={onClose} type="primary" style={{ 'float': 'right' }}>提交</Button>
+        </div>
       </Drawer>
     </div >
 
