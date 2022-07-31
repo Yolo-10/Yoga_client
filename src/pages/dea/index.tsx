@@ -9,7 +9,7 @@ import { GetClassById, GetSignupUsersApi } from '@/services/api';
 
 export default function dea(props: any) {
   const { c_id } = props.location.query;
-  const [Users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]);
   const [item, setItem] = useState({
     "c_id": "",
     "c_name": "",
@@ -47,6 +47,8 @@ export default function dea(props: any) {
       console.log(err)
     )
   }, [])
+
+
   return (
     <div className='page_dea'>
       <header>
@@ -64,10 +66,9 @@ export default function dea(props: any) {
           </div >}
         showIcon >
       </Alert >
-
       <div className='hd_des'>
-        <div>普通金额：{(Number(item.nm_money) / item.p_limit).toFixed(2)}</div>
-        <div>非预约金额：{item?.na_money}</div>
+        <div>普通金额：{(Number(item.nm_money) / (users.length > 5 ? users.length : 5)).toFixed(2)}</div>
+        <div>非预约金额：{(Number(item.nm_money) / (users.length > 5 ? users.length : 5) * 1.5).toFixed(2)}</div>
         <div>人数：{item?.p_limit}</div>
       </div>
       <div>
@@ -78,8 +79,8 @@ export default function dea(props: any) {
           <li>黑名单</li>
         </ul>
         <div className="list_bd">
-          {Users?.map((u_item, i) =>
-            <Item u_item={u_item} today={item?.time} key={i} c_id={item?.c_id} />)}
+          {users?.map((u_item, i) =>
+            <Item u_item={u_item} classDay={item?.time} key={i} c_id={item?.c_id} />)}
         </div>
       </div>
     </div >
