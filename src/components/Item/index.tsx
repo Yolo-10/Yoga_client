@@ -20,7 +20,7 @@ export default function Item(props: any) {
   };
 
   return (
-    <ul className={today.substring(5, 10) == appo_time.substring(0, 5) ?
+    <ul className={today.substring(5, 10) == app_t.substring(0, 5) ?
       "list_item green" : (blacklist ? "list_item red" : "list_item")} >
       <li>{u_name}</li>
       <li>{app_t}</li>

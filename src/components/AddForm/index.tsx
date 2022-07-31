@@ -124,7 +124,7 @@ const AddForm = (props: any) => {
             <Col span={12}>
               <Form.Item
                 name="nm_money"
-                label="普通金额(300~500)"
+                label="普通金额"
                 rules={[{ required: true, message: '请输入普通金额' }]}>
                 <InputNumber min={300} max={500} controls={false}
                   addonBefore={reduceIcon1} addonAfter={addIcon1} readOnly />
@@ -133,7 +133,7 @@ const AddForm = (props: any) => {
             <Col span={12}>
               <Form.Item
                 name="p_limit"
-                label="人数(5~12)"
+                label="人数"
                 rules={[{ required: true, message: '请输入课程人数' }]}>
                 <InputNumber min={5} max={12} controls={false}
                   addonBefore={reduceIcon2} addonAfter={addIcon2} readOnly />
