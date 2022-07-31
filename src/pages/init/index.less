@@ -1,5 +1,8 @@
 @clc_blue:#1890ff;
 @clc_border:#e1e1e1;
+body {
+  font-family: "Heiti SC","Droidsansfallback","Helvetica Neue",Helvetica,sans-serif;
+}
 
 .page_init{
   box-sizing: border-box;
@@ -7,13 +10,13 @@
   min-width: 280px;
   margin: 0px auto;
   height: 100vh;
-  padding: 20px;
+  padding: 1rem;
 
   //alert头部信息
   .ant-alert-message > div {
     display: flex;
     justify-content: space-around;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
   }
 
   //头部以下内容
@@ -30,7 +33,7 @@
       border: 0;
       z-index: 100;
       height: 45px;
-      font-size: 21px;
+      font-size: 1.35rem;
     }
 
     .cannot_add{
@@ -98,7 +101,7 @@
       // 日期选择器文字样式
       .ant-select-selection-item{
         font-weight: 500;
-        font-size: 24px;
+        font-size: 1.6rem;
         height: 45px;
         line-height: 45px;
       }
@@ -147,6 +150,7 @@
     &>button{
       flex:1;
       height: 45px;
+      font-size: 1.2rem;
     }
   }
 }
@@ -156,9 +160,10 @@
   display: none;
 }
 
+//各项标题注释
 .ant-form-item-label > label{
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 1.2rem;
 }
 
 //课程选择、时长撑满父组件
@@ -170,6 +175,7 @@
     text-align: center;
     height: 45px;
     line-height: 45px;
+    font-size: 1.2rem;
   }
 }
 
@@ -177,14 +183,24 @@
 .ant-input-number-input-wrap>input{
   text-align: center;
   height: 45px;
+  font-size: 1.2rem;
 }
 
 .ant-picker{
   width: 100%;
   height: 45px;
+  
+  &>.ant-picker-input > input {font-size: 1.2rem;}
 }
 
 .ant-input-affix-wrapper{
   width: 100%;
   height: 45px;
+  &>input{font-size: 1.2rem;}
 }
+
+html { font-size:14px }
+@media screen and (min-width:321px) and (max-width:414px){html{font-size:16px}}
+@media screen and (min-width:415px) and (max-width:639px){html{font-size:18px}}
+@media screen and (min-width:640px) and (max-width:749px){html{font-size:20px}}
+@media screen and (min-width:749px){html{font-size:22px}}

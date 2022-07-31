@@ -8,17 +8,6 @@ import './index.less'
 import { useEffect, useState } from 'react';
 import { GetMonClassApi, GetTodayClassApi } from '@/services/api';
 
-const item = {
-  "c_id": 1,
-  "c_name": "瑜伽",
-  "time": "2022-07-16 17:00-18:30",
-  "place": "师生活动中心2-108",
-  "nm_money": "400",
-  "na_money": "60",
-  "p_limit": 50
-}
-
-
 const IndexPage = () => {
   let [canAdd, setCanAdd] = useState(true);
   let [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
@@ -31,12 +20,7 @@ const IndexPage = () => {
     return (
       monClassArr.map((item: any) => {
         return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ?
-          (<Link className='item' to={{
-            "pathname": "/dea",
-            "params": {
-              item,
-            },
-          }} key={item.c_id}
+          (<Link className='item' to={`/dea?c_id=${item.c_id}`} key={item.c_id}
           >
             {item.c_name === 'yoga' ? <img src={yogaImg} alt="" /> : ""}
           </Link >)

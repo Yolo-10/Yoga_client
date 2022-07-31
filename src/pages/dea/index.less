@@ -26,24 +26,18 @@
     height: 45px;
     display: flex;
     align-items: center;
+    justify-content: start;
 
     //箭头
-    &>:nth-child(1){
-      position: absolute;
-      top:8px;
-      left: 5px;
-
-      &>svg{
+    &>:nth-child(1)>svg{
         font-size: 24px;
-      }
     }
 
     //字段
     &>:nth-child(2){
-      width: 100px;
-      font-weight: 700;
-      font-size: 1.1rem;
       position: absolute;
+      font-weight: 700;
+      font-size: 1.6rem;
       left: 50%;
       margin: 0 0 0 -50px ;
       text-align: center;
@@ -54,21 +48,20 @@
   .ant-alert-message > div {
     display: flex;
     justify-content: space-around;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
   }
 
   //头部基本信息2行
   .hd_des{
     display: flex;
-    height: 36px;
-    line-height: 36px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     border-bottom: 1px solid #91d5ff;
+    background-color: #e6f7ff;
 
     >div{
       flex-grow: 1;
       text-align: center;
-      background-color: #e6f7ff;
+      padding: 5px 3px;
 
       +div{
         border-left: 1px solid #91d5ff;
@@ -79,7 +72,8 @@
   .list_hd{
     display: flex;
     padding: 5px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    height: 40px;
 
     // color: #1890ff;
     border-radius: 3px;
@@ -92,8 +86,9 @@
   .list_item{
     display: flex;
     padding: 0 5px;
-    font-size: .9375rem;
+    font-size: 1.1rem;
     min-height: 36px;
+    align-items: center;
 
     &+.list_item{
       margin-top: 5px;
