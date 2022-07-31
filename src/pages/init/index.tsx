@@ -6,7 +6,7 @@ import AddForm from "../../components/AddForm";
 import yogaImg from '../../img/瑜伽.svg'
 import './index.less'
 import { useEffect, useState } from 'react';
-import { GetMonClassApi, GetTodayClassApi } from '@/request/api';
+import { GetMonClassApi, GetTodayClassApi } from '@/services/api';
 
 const item = {
   "c_id": 1,

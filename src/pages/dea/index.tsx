@@ -5,7 +5,7 @@ import yogaImg from '../../img/瑜伽.svg'
 import './index.less'
 import { history } from 'umi';
 import { useEffect, useState } from 'react';
-import { GetSignupUsersApi } from '@/request/api';
+import { GetSignupUsersApi } from '@/services/api';
 
 export default function dea(props: any) {
   const { item } = props.location.params;

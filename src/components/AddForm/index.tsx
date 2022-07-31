@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { useState } from 'react'
 import moment from 'moment';
-import { AddClassApi } from '@/request/api';
+import { AddClassApi } from '@/services/api';
 
 
 const AddForm = (props: any) => {
