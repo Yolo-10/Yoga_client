@@ -4,17 +4,34 @@ import {
 } from 'antd';
 import { useState } from 'react'
 import moment from 'moment';
+import { AddClassApi } from '@/request/api';
 
 
 const AddForm = (props: any) => {
-  const { canAdd } = props;
+  const { canAdd, choseDay, setIsAdd } = props;
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
   const showDrawer = () => {
-    canAdd ? setVisible(true) : null;
+    canAdd ? (setVisible(true), setIsAdd(false)) : null;
   };
   const onClose = () => { setVisible(false); };
+  const onFinish = () => {
+    const { c_name, began_time, time_step, place, nm_money, p_limit } = form.getFieldsValue();
+    //计算整个课程的时间段
+    let end_time = moment(began_time).add(time_step, 'minutes');
+    let time = choseDay + " " + began_time.format('HH:mm') + "-" + end_time.format('HH:mm');
+    //发送请求
+    AddClassApi({ c_name, time, place, nm_money, p_limit }).then((res) => {
+      if (res.status === 1) {
+        setVisible(false);
+        message.success('添加成功');
+        form.resetFields();
+        setIsAdd(true);
+      }
+    }).catch((err) => console.log(err));
+  }
+
 
   // 加减事件
   const changeNumber = (who: string, add: boolean, step: number, minV: number, maxV: number) => {
@@ -25,15 +42,8 @@ const AddForm = (props: any) => {
       return;
     }
     form.setFieldsValue({ [(() => who)()]: newValue })
-    updateNa_money();
   };
 
-  //更新非预约金额
-  const updateNa_money = () => {
-    //从表单数据中获取值
-    let { nm_money, p_limit } = form.getFieldsValue();
-    form.setFieldsValue({ 'na_money': ((nm_money / p_limit) * 1.5).toFixed(2) });
-  }
 
   //加减事件注册 + 图标声明
   const addIcon1 = (
@@ -65,8 +75,9 @@ const AddForm = (props: any) => {
             'na_money': 60.00,
             'p_limit': 10,
             "began_time": moment('17:00', 'HH:mm'),
-            "time_step": 90,
-          }}>
+            "time_step": '90',
+          }}
+        >
           <Col span={24}>
             <Form.Item
               name="c_name"
@@ -74,8 +85,8 @@ const AddForm = (props: any) => {
               rules={[{ required: true }]}>
               <Radio.Group buttonStyle="solid">
                 <Radio.Button value="yoga" >瑜伽</Radio.Button>
-                <Radio.Button value="b">围棋</Radio.Button>
-                <Radio.Button value="c">羽毛球</Radio.Button>
+                <Radio.Button value="go">围棋</Radio.Button>
+                <Radio.Button value="badminton">羽毛球</Radio.Button>
               </Radio.Group>
             </Form.Item>
           </Col>
@@ -133,7 +144,7 @@ const AddForm = (props: any) => {
 
         <div className='btn_ope'>
           <Button onClick={onClose} style={{ 'float': 'left' }}>取消</Button>
-          <Button onClick={onClose} type="primary" style={{ 'float': 'right' }}>提交</Button>
+          <Button onClick={onFinish} type="primary" style={{ 'float': 'right' }}>提交</Button>
         </div>
       </Drawer>
     </div >

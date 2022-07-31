@@ -4,50 +4,27 @@ import Item from '../../components/Item'
 import yogaImg from '../../img/瑜伽.svg'
 import './index.less'
 import { history } from 'umi';
+import { useEffect, useState } from 'react';
+import { GetSignupUsersApi } from '@/request/api';
 
-const item = {
-  "c_name": "瑜伽",
-  "time": "2022-07-16 17:00-18:30",
-  "place": "师生活动中心2-108",
-  "nm_money": "40.00",
-  "na_money": "60.00",
-  "p_limit": 10
-}
-
-const u_list = [{
-  "u_name": "张三",
-  "appo_time": "2022-07-12 14:00",
-  "cost": "40"
-}, {
-  "u_name": "李四",
-  "appo_time": "2022-07-12 15:00",
-  "cost": "40"
-}, {
-  "u_name": "张三",
-  "appo_time": "2022-07-13 15:30",
-  "cost": "40"
-}, {
-  "u_name": "王五",
-  "appo_time": "2022-07-14 17:00",
-  "cost": "40"
-}, {
-  "u_name": "张章",
-  "appo_time": "2022-07-15 18:00",
-  "cost": "40"
-}, {
-  "u_name": "李粒",
-  "appo_time": "2022-07-16 12:00",
-  "cost": "60"
-}, {
-  "u_name": "倪浩浩",
-  "appo_time": "2022-07-16 14:00",
-  "cost": "60"
-},]
-
-export default function dea() {
+export default function dea(props: any) {
+  const { item } = props.location.params;
+  const [Users, setUsers] = useState([]);
   const returnBefore = () => {
     history.go(-1);
   }
+
+  useEffect(() => {
+    GetSignupUsersApi({
+      params: {
+        "c_id": item.c_id,
+      }
+    }).then(res => {
+      res.status == 1 ? setUsers(res.data) : null;
+    }).catch(err =>
+      console.log(err)
+    )
+  }, [])
 
   return (
     <div className='page_dea'>
@@ -57,7 +34,7 @@ export default function dea() {
       </header>
       <Alert message={
         <div>
-          <span>{item.time}</span>
+          <span>{item.time.substring(5,)}</span>
           <span>{item.place}</span>
         </div>}
         icon={
@@ -68,7 +45,7 @@ export default function dea() {
       </Alert >
 
       <div className='hd_des'>
-        <div>普通金额：{item.nm_money}</div>
+        <div>普通金额：{item.nm_money / item.p_limit}</div>
         <div>非预约金额：{item.na_money}</div>
         <div>人数：{item.p_limit}</div>
       </div>
@@ -80,8 +57,8 @@ export default function dea() {
           <li>黑名单</li>
         </ul>
         <div className="list_bd">
-          {u_list.map((u_item, i) =>
-            <Item u_item={u_item} today={item.time.split(' ')[0]} i={i} key={i} />)}
+          {Users.map((u_item, i) =>
+            <Item u_item={u_item} today={item.time} i={i} key={i} />)}
         </div>
       </div>
     </div >
