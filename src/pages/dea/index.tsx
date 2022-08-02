@@ -16,7 +16,6 @@ export default function dea(props: any) {
     "time": "",
     "place": "",
     "nm_money": "0.00",
-    "na_money": "0.00",
     "p_limit": 0,
   });
 
@@ -42,7 +41,9 @@ export default function dea(props: any) {
         "c_id": c_id,
       }
     }).then(res => {
-      res.status == 1 ? setUsers(res.data) : null;
+      if (res.status == 1) {
+        setUsers(res.data);
+      }
     }).catch(err =>
       console.log(err)
     )
@@ -80,7 +81,10 @@ export default function dea(props: any) {
         </ul>
         <div className="list_bd">
           {users?.map((u_item, i) =>
-            <Item u_item={u_item} classDay={item?.time} key={i} c_id={item?.c_id} />)}
+            <Item u_item={u_item} classDay={item?.time} key={i} c_id={item?.c_id}
+              nm_money={(Number(item.nm_money) / (users.length > 5 ? users.length : 5)).toFixed(2)}
+              na_money={(Number(item.nm_money) / (users.length > 5 ? users.length : 5) * 1.5).toFixed(2)}
+            />)}
         </div>
       </div>
     </div >

@@ -8,6 +8,7 @@ export default defineConfig({
   routes: [
     { path: '/', component: '@/pages/init' },
     { path: '/dea', component: '@/pages/dea' },
+    { path: '/login', component: '@/pages/login' },
   ],
   fastRefresh: {},
   locale: {
@@ -16,11 +17,11 @@ export default defineConfig({
     // 默认为true。为true时，会使用`navigator.language`覆盖默认。为false时，则使用默认语言
     baseNavigator: false,
   },
-  // proxy: {
-  //   '/api': {
-  //     target: 'http://localhost:8000',
-  //     pathRewrite: { '^/api': '' },
-  //     changeOrigin: true
-  //   }
-  // }
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8000',
+      pathRewrite: { '^/api': '' },
+      changeOrigin: true
+    }
+  }
 });
