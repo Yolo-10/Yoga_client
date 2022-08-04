@@ -1,5 +1,6 @@
 import request from './request'
 
+export const LoginApi = (data: any) => request.get('/login', data);
 export const AddClassApi = (data: any) => request.post('/addClass', data);
 export const GetMonClassApi = (data: any) => request.get('/getMonClass', data);
 export const GetTodayClassApi = (data: any) => request.get('/getTodayClass', data);
