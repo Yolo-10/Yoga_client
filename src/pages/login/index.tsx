@@ -19,9 +19,13 @@ export default function Login() {
           localStorage.setItem('yoga_token', res.data);
           message.success('登录成功,即将跳转');
           setTimeout(() => history.push('/'), 1000);
+        } else if (res.status == -2) {
+          message.error('用户名或密码错误');
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -61,16 +65,6 @@ export default function Login() {
               type="password"
               placeholder="密码"
             />
-          </Form.Item>
-
-          <Form.Item>
-            <a className="login-form-register" href="">
-              注册
-            </a>
-
-            <a className="login-form-forgot" href="">
-              忘记密码？
-            </a>
           </Form.Item>
 
           <Form.Item>
