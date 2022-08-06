@@ -1,46 +1,46 @@
-@clc_bck:#f1f1f1;
-@clc_blue:#1890ff;
-@clc_border:#e1e1e1;
-@clc_grey:#bbb;
+@clc_bck: #f1f1f1;
+@clc_blue: #1890ff;
+@clc_border: #e1e1e1;
+@clc_grey: #bbb;
 
-.page_dea{
+.page_dea {
   margin: 0 auto;
 
-  ul{
+  ul {
     margin: 0;
   }
-  li{
+  li {
     list-style: none;
   }
-  .green{
+  .green {
     color: #3eb645;
   }
-  .red{
+  .red {
     color: #f00;
   }
 
-
   //课程详情
-  header{
+  header {
     position: relative;
     height: 45px;
     display: flex;
     align-items: center;
     justify-content: start;
 
-    //箭头
-    &>:nth-child(1)>svg{
-        font-size: 24px;
+    & > :nth-child(1) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     //字段
-    &>:nth-child(2){
+    & > :nth-child(2) {
       width: 160px;
       position: absolute;
       font-weight: 700;
       font-size: 1.6rem;
       left: 50%;
-      margin: 0 0 0 -80px ;
+      margin: 0 0 0 -80px;
       text-align: center;
     }
   }
@@ -53,24 +53,24 @@
   }
 
   //头部基本信息2行
-  .hd_des{
+  .hd_des {
     display: flex;
     font-size: 1.2rem;
     border-bottom: 1px solid #91d5ff;
     background-color: #e6f7ff;
 
-    >div{
+    > div {
       flex-grow: 1;
       text-align: center;
       padding: 5px 3px;
 
-      +div{
+      + div {
         border-left: 1px solid #91d5ff;
       }
     }
   }
 
-  .list_hd{
+  .list_hd {
     display: flex;
     padding: 5px;
     font-size: 1.2rem;
@@ -80,24 +80,25 @@
     border-radius: 3px;
   }
 
-  .list_bd{
+  .list_bd {
     margin: 5px 0;
   }
 
-  .list_item{
+  .list_item {
     display: flex;
     padding: 0 5px;
     font-size: 1.1rem;
     min-height: 36px;
     align-items: center;
 
-    &+.list_item{
+    & + .list_item {
       margin-top: 5px;
     }
   }
 
-  .list_hd,.list_item{
-    &>li{
+  .list_hd,
+  .list_item {
+    & > li {
       text-align: center;
       display: block;
       width: 25%;
@@ -105,13 +106,21 @@
   }
 
   //图标
-  .item{
+  .item {
     max-width: 32px;
     width: 100%;
     display: inline-block;
-  
-    &>img{
+
+    & > img {
       width: 100%;
     }
+  }
+}
+
+//弹出对话框
+.ant-modal-confirm-body {
+  display: flex;
+  & > span + span {
+    margin-left: 5px;
   }
 }

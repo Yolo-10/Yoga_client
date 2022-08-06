@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Button,
   Radio,
@@ -9,9 +10,7 @@ import {
   Input,
   Row,
   InputNumber,
-  Slider,
 } from 'antd';
-import { useState } from 'react';
 import moment from 'moment';
 import { AddClassApi } from '@/services/api';
 

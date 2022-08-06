@@ -1,19 +1,18 @@
 import axios from 'axios';
+import { encodeJWT } from './token';
 
-const axiosOption = {
-  // baseURL: 'api',
-  baseURL: 'http://110.42.230.161/',
+const BASE_URL = {
+  baseURL: 'api',
+  // baseURL: 'http://110.42.230.161/',
 };
 
-const instance = axios.create(axiosOption);
+const instance = axios.create(BASE_URL);
 
 instance.interceptors.request.use(
   (config) => {
     let yoga_token = localStorage.getItem('yoga_token');
     if (yoga_token) {
-      config.headers = {
-        yoga_token: yoga_token,
-      };
+      config.headers.Authorization = encodeJWT(yoga_token);
     }
     return config;
   },

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Form, Input, message } from 'antd';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import './index.less';
-import { LoginApi } from '@/services/api';
 import { useHistory } from 'umi';
+import { Button, Form, Input, message } from 'antd';
+import { LoginApi } from '@/services/api';
+import { Svg } from '@/components';
+import './index.less';
 
 export default function Login() {
   const history = useHistory();
@@ -17,7 +17,7 @@ export default function Login() {
       .then((res) => {
         if (res.status == 0) {
           localStorage.setItem('yoga_token', res.data);
-          message.success('登录成功,即将跳转');
+          message.success('登录成功');
           setTimeout(() => history.push('/'), 1000);
         } else if (res.status == -2) {
           message.error('用户名或密码错误');
@@ -43,10 +43,9 @@ export default function Login() {
           >
             <Input
               prefix={
-                <UserOutlined
-                  className="site-form-item-icon"
-                  style={{ color: '#bfbfbf' }}
-                />
+                <div className="icon_box">
+                  <Svg id={'usr'} size={24} color={`#bfbfbf`} />
+                </div>
               }
               placeholder="工号"
             />
@@ -57,10 +56,9 @@ export default function Login() {
           >
             <Input.Password
               prefix={
-                <LockOutlined
-                  className="site-form-item-icon"
-                  style={{ color: '#bfbfbf' }}
-                />
+                <div className="icon_box">
+                  <Svg id={'lock1'} size={24} color={`#bfbfbf`} />
+                </div>
               }
               type="password"
               placeholder="密码"
