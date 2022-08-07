@@ -3,6 +3,7 @@ import { useHistory } from 'umi';
 import { Button, Form, Input, message } from 'antd';
 import { LoginApi } from '@/services/api';
 import { Svg } from '@/components';
+import jwt from '@/util/token';
 import './index.less';
 
 export default function Login() {
@@ -17,7 +18,7 @@ export default function Login() {
     })
       .then((res) => {
         if (res.status == 0) {
-          localStorage.setItem('yoga_token', res.data);
+          jwt.saveToken(res.data);
           message.success(res.message);
           setTimeout(() => history.push('/'), 1000);
         } else {

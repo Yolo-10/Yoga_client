@@ -1,4 +1,5 @@
 import axios from 'axios';
+import jwt from '@/util/token';
 
 const BASE_URL = {
   // baseURL: 'api',
@@ -9,7 +10,7 @@ const instance = axios.create(BASE_URL);
 
 instance.interceptors.request.use(
   (config) => {
-    let yoga_token = localStorage.getItem('yoga_token');
+    let yoga_token = jwt.getToken();
     if (yoga_token) {
       config.headers['Authorization'] = `Bearer ${yoga_token}`;
     }
@@ -27,7 +28,7 @@ instance.interceptors.response.use(
   (error) => {
     const errRes = error.response;
     if (errRes.status === 401) {
-      window.localStorage.removeItem('yoga_token');
+      jwt.removeToken();
       setTimeout(() => {
         window.location.href = '/login';
       }, 2);

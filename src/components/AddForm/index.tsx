@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { AddClassApi } from '@/services/api';
+import jwt from '@/util/token';
 
 const AddForm = (props: any) => {
   const { canAdd, choseDay, setIsAdd } = props;
@@ -82,7 +83,9 @@ const AddForm = (props: any) => {
     <div onClick={() => changeNumber('p_limit', false, 1, 5, 12)}>-</div>
   );
 
-  return (
+  return jwt.getUser() == null ? (
+    <></>
+  ) : (
     <div>
       <Button
         className={canAdd ? 'add_icon' : 'add_icon cannot_add'}

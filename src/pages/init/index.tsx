@@ -6,12 +6,11 @@ import moment from 'moment';
 import { GetMonClassApi, GetTodayClassApi } from '@/services/api';
 import { AddForm, Svg } from '@/components';
 import yogaImg from '@/static/yoga.svg';
+import jwt from '@/util/token';
 import './index.less';
 
 const IndexPage = () => {
-  const [canAdd, setCanAdd] = useState(
-    localStorage.getItem('yoga_token') ? true : false,
-  );
+  const [canAdd, setCanAdd] = useState(true);
   const [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
   const [choseMonth, setChoseMonth] = useState(moment().format('YYYY-MM'));
   const [isAdd, setIsAdd] = useState(false);
@@ -22,7 +21,11 @@ const IndexPage = () => {
   const DateCellRender = (value: Moment) => {
     return monClassArr.map((item: any) => {
       return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ? (
-        <Link className="item" to={`/dea?c_id=${item.c_id}`} key={item.c_id}>
+        <Link
+          className="item"
+          key={item.c_id}
+          to={jwt.getUser() == null ? '/login' : `/dea?c_id=${item.c_id}`}
+        >
           {item.c_name === 'yoga' ? <img src={yogaImg} alt="" /> : ''}
         </Link>
       ) : null;
@@ -31,10 +34,10 @@ const IndexPage = () => {
 
   //登录、退出
   const userLogin = () => {
-    let token = localStorage.getItem('yoga_token');
+    let token = jwt.getToken();
     if (token) {
       //退出账号
-      localStorage.removeItem('yoga_token');
+      jwt.removeToken();
       window.location.href = '/';
       message.success('退出账号');
     } else {
@@ -44,14 +47,12 @@ const IndexPage = () => {
 
   //选择日期发生变化的回调
   const calChange = (value: Moment) => {
-    if (localStorage.getItem('yoga_token')) {
-      //设置添加按钮的开启
-      if (value.isSame(moment(), 'day')) {
-        setCanAdd(true);
-        return;
-      }
-      value.isAfter(moment()) ? setCanAdd(true) : setCanAdd(false);
+    //设置添加按钮的开启
+    if (value.isSame(moment(), 'day')) {
+      setCanAdd(true);
+      return;
     }
+    value.isAfter(moment()) ? setCanAdd(true) : setCanAdd(false);
     //设置添加课程的默认日期
     setChoseDay(value.format('YYYY-MM-DD'));
   };
