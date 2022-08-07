@@ -7,8 +7,9 @@ import './index.less';
 
 export default function Login() {
   const history = useHistory();
-  const onFinish = (values: any) => {
-    LoginApi({
+
+  const onFinish = async (values: any) => {
+    await LoginApi({
       params: {
         u_id: values.u_id,
         password: values.password,
@@ -17,10 +18,10 @@ export default function Login() {
       .then((res) => {
         if (res.status == 0) {
           localStorage.setItem('yoga_token', res.data);
-          message.success('登录成功');
+          message.success(res.message);
           setTimeout(() => history.push('/'), 1000);
-        } else if (res.status == -2) {
-          message.error('用户名或密码错误');
+        } else {
+          message.error(res.message);
         }
       })
       .catch((err) => {

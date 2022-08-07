@@ -9,7 +9,9 @@ import yogaImg from '@/static/yoga.svg';
 import './index.less';
 
 const IndexPage = () => {
-  const [canAdd, setCanAdd] = useState(true);
+  const [canAdd, setCanAdd] = useState(
+    localStorage.getItem('yoga_token') ? true : false,
+  );
   const [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
   const [choseMonth, setChoseMonth] = useState(moment().format('YYYY-MM'));
   const [isAdd, setIsAdd] = useState(false);
@@ -29,11 +31,12 @@ const IndexPage = () => {
 
   //登录、退出
   const userLogin = () => {
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem('yoga_token');
     if (token) {
       //退出账号
-      localStorage.removeItem('token');
+      localStorage.removeItem('yoga_token');
       window.location.href = '/';
+      message.success('退出账号');
     } else {
       history.push('/login');
     }
@@ -41,12 +44,14 @@ const IndexPage = () => {
 
   //选择日期发生变化的回调
   const calChange = (value: Moment) => {
-    //设置添加按钮的开启
-    if (value.isSame(moment(), 'day')) {
-      setCanAdd(true);
-      return;
+    if (localStorage.getItem('yoga_token')) {
+      //设置添加按钮的开启
+      if (value.isSame(moment(), 'day')) {
+        setCanAdd(true);
+        return;
+      }
+      value.isAfter(moment()) ? setCanAdd(true) : setCanAdd(false);
     }
-    value.isAfter(moment()) ? setCanAdd(true) : setCanAdd(false);
     //设置添加课程的默认日期
     setChoseDay(value.format('YYYY-MM-DD'));
   };
@@ -57,26 +62,34 @@ const IndexPage = () => {
     setChoseMonth(value.format('YYYY-MM'));
   };
 
-  //日历课程动态监听
-  useEffect(() => {
-    GetMonClassApi({ params: { Mon: choseMonth } })
+  const getMonClass = async () => {
+    await GetMonClassApi({ params: { Mon: choseMonth } })
       .then((res) => {
         if (res.status === 1) {
           setMonClassArr(res.data);
         }
       })
       .catch((err) => console.log(err));
-  }, [choseMonth, isAdd]);
+  };
 
-  //头部信息
-  useEffect(() => {
-    GetTodayClassApi({ params: { Today: choseDay } })
+  const getTodayClass = async () => {
+    await GetTodayClassApi({ params: { Today: choseDay } })
       .then((res) => {
         if (res.status === 1) {
           setTodayClassArr(res.data);
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  //日历课程动态监听
+  useEffect(() => {
+    getMonClass();
+  }, [choseMonth, isAdd]);
+
+  //头部信息
+  useEffect(() => {
+    getTodayClass();
   }, [isAdd]);
 
   return (

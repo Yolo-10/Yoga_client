@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import { Alert } from 'antd';
 import moment from 'moment';
-import { GetClassById, GetSignupUsersApi } from '@/services/api';
+import { GetClassByIdApi, GetSignupUsersApi } from '@/services/api';
 import { Item, Svg } from '@/components';
 import yogaImg from '@/static/yoga.svg';
 import './index.less';
@@ -25,18 +25,9 @@ export default function dea(props: any) {
     history.go(-1);
   };
 
-  useEffect(() => {
-    //检测课程是否已经结束
-    let classEndTime =
-      item.time.substring(0, 10) + ' ' + item.time.substring(17, 22);
-    if (moment(classEndTime, moment.ISO_8601).isBefore(moment())) {
-      setIsClassEnd(true);
-    }
-  }, [item]);
-
-  useEffect(() => {
-    //头部信息
-    GetClassById({
+  //请求课程头部信息
+  const getClassById = async () => {
+    GetClassByIdApi({
       params: {
         c_id: c_id,
       },
@@ -45,8 +36,9 @@ export default function dea(props: any) {
         res.status == 1 ? setItem(res.data[0]) : null;
       })
       .catch((err) => console.log(err));
-
-    //报名列表
+  };
+  // 请求报名列表
+  const getSignupUsers = async () => {
     GetSignupUsersApi({
       params: {
         c_id: c_id,
@@ -58,6 +50,20 @@ export default function dea(props: any) {
         }
       })
       .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    //检测课程是否已经结束
+    let classEndTime =
+      item.time.substring(0, 10) + ' ' + item.time.substring(17, 22);
+    if (moment(classEndTime, moment.ISO_8601).isBefore(moment())) {
+      setIsClassEnd(true);
+    }
+  }, [item]);
+
+  useEffect(() => {
+    getClassById();
+    getSignupUsers();
   }, []);
 
   return (

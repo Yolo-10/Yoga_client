@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { encodeJWT } from './token';
 
 const BASE_URL = {
-  baseURL: 'api',
-  // baseURL: 'http://110.42.230.161/',
+  // baseURL: 'api',
+  baseURL: 'http://110.42.230.161/',
 };
 
 const instance = axios.create(BASE_URL);
@@ -12,7 +11,7 @@ instance.interceptors.request.use(
   (config) => {
     let yoga_token = localStorage.getItem('yoga_token');
     if (yoga_token) {
-      config.headers.Authorization = encodeJWT(yoga_token);
+      config.headers['Authorization'] = `Bearer ${yoga_token}`;
     }
     return config;
   },
@@ -26,6 +25,13 @@ instance.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    const errRes = error.response;
+    if (errRes.status === 401) {
+      window.localStorage.removeItem('yoga_token');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2);
+    }
     return Promise.reject(error);
   },
 );

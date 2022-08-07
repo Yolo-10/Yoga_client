@@ -25,7 +25,7 @@ const AddForm = (props: any) => {
   const onClose = () => {
     setVisible(false);
   };
-  const onFinish = () => {
+  const onFinish = async () => {
     const { c_name, began_time, time_step, place, nm_money, p_limit } =
       form.getFieldsValue();
     //计算整个课程的时间段
@@ -37,7 +37,7 @@ const AddForm = (props: any) => {
       '-' +
       end_time.format('HH:mm');
     //发送请求
-    AddClassApi({ c_name, time, place, nm_money, p_limit })
+    await AddClassApi({ c_name, time, place, nm_money, p_limit })
       .then((res) => {
         if (res.status === 1) {
           setVisible(false);
@@ -48,7 +48,6 @@ const AddForm = (props: any) => {
       })
       .catch((err) => {
         console.log(err);
-        message.success('添加失败');
       });
   };
 
