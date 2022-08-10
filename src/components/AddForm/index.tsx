@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useModel } from 'umi';
 import {
   Button,
   Radio,
@@ -13,9 +14,11 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { AddClassApi } from '@/services/api';
-import jwt from '@/util/token';
 
 const AddForm = (props: any) => {
+  const {
+    initialState: { isLogin, userInfo },
+  } = useModel('@@initialState');
   const { canAdd, choseDay, setIsAdd } = props;
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
@@ -83,121 +86,128 @@ const AddForm = (props: any) => {
     <div onClick={() => changeNumber('p_limit', false, 1, 5, 12)}>-</div>
   );
 
-  return jwt.getUser() == null ? (
-    <></>
-  ) : (
-    <div>
-      <Button
-        className={canAdd ? 'add_icon' : 'add_icon cannot_add'}
-        onClick={showDrawer}
-      >
-        添加
-      </Button>
-      <Drawer
-        title="添加课程"
-        width={'417px'}
-        onClose={onClose}
-        visible={visible}
-      >
-        <Form
-          layout="vertical"
-          form={form}
-          hideRequiredMark
-          initialValues={{
-            c_name: 'yoga',
-            place: '师生活动中心2-108',
-            nm_money: 400,
-            na_money: 60.0,
-            p_limit: 10,
-            began_time: moment('17:00', 'HH:mm'),
-            time_step: '90',
-          }}
+  return (
+    //不登录或是学员时，无权添加
+    !isLogin || userInfo?.u_type == 1 ? (
+      <></>
+    ) : (
+      <div>
+        <Button
+          className={canAdd ? 'add_icon' : 'add_icon cannot_add'}
+          onClick={showDrawer}
         >
-          <Col span={24}>
-            <Form.Item name="c_name" label="" rules={[{ required: true }]}>
-              <Radio.Group buttonStyle="solid">
-                <Radio.Button value="yoga">瑜伽</Radio.Button>
-                <Radio.Button value="go">围棋</Radio.Button>
-                <Radio.Button value="badminton">羽毛球</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item label="上课时间" name="began_time">
-              <TimePicker
-                minuteStep={30}
-                format={'HH:mm'}
-                showNow={false}
-                inputReadOnly
-              />
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item label="时长(分钟)" name="time_step">
-              <Radio.Group buttonStyle="solid">
-                <Radio.Button value="60">60</Radio.Button>
-                <Radio.Button value="90">90</Radio.Button>
-                <Radio.Button value="120">120</Radio.Button>
-                <Radio.Button value="150">150</Radio.Button>
-                <Radio.Button value="180">180</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item
-              name="place"
-              label="地点"
-              rules={[{ required: true, message: '请输入地点' }]}
-            >
-              <Input placeholder="请输入地点" allowClear={true} />
-            </Form.Item>
-          </Col>
-          <Row gutter={20}>
-            <Col span={12}>
-              <Form.Item
-                name="nm_money"
-                label="普通金额"
-                rules={[{ required: true, message: '请输入普通金额' }]}
-              >
-                <InputNumber
-                  min={300}
-                  max={500}
-                  controls={false}
-                  addonBefore={reduceIcon1}
-                  addonAfter={addIcon1}
-                  readOnly
+          添加
+        </Button>
+        <Drawer
+          title="添加课程"
+          width={'417px'}
+          onClose={onClose}
+          visible={visible}
+        >
+          <Form
+            layout="vertical"
+            form={form}
+            hideRequiredMark
+            initialValues={{
+              c_name: 'yoga',
+              place: '师生活动中心2-108',
+              nm_money: 400,
+              na_money: 60.0,
+              p_limit: 10,
+              began_time: moment('17:00', 'HH:mm'),
+              time_step: '90',
+            }}
+          >
+            <Col span={24}>
+              <Form.Item name="c_name" label="" rules={[{ required: true }]}>
+                <Radio.Group buttonStyle="solid">
+                  <Radio.Button value="yoga">瑜伽</Radio.Button>
+                  <Radio.Button value="go">围棋</Radio.Button>
+                  <Radio.Button value="badminton">羽毛球</Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <Form.Item label="上课时间" name="began_time">
+                <TimePicker
+                  minuteStep={30}
+                  format={'HH:mm'}
+                  showNow={false}
+                  inputReadOnly
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
-              <Form.Item
-                name="p_limit"
-                label="人数"
-                rules={[{ required: true, message: '请输入课程人数' }]}
-              >
-                <InputNumber
-                  min={5}
-                  max={12}
-                  controls={false}
-                  addonBefore={reduceIcon2}
-                  addonAfter={addIcon2}
-                  readOnly
-                />
+            <Col span={24}>
+              <Form.Item label="时长(分钟)" name="time_step">
+                <Radio.Group buttonStyle="solid">
+                  <Radio.Button value="60">60</Radio.Button>
+                  <Radio.Button value="90">90</Radio.Button>
+                  <Radio.Button value="120">120</Radio.Button>
+                  <Radio.Button value="150">150</Radio.Button>
+                  <Radio.Button value="180">180</Radio.Button>
+                </Radio.Group>
               </Form.Item>
             </Col>
-          </Row>
-        </Form>
+            <Col span={24}>
+              <Form.Item
+                name="place"
+                label="地点"
+                rules={[{ required: true, message: '请输入地点' }]}
+              >
+                <Input placeholder="请输入地点" allowClear={true} />
+              </Form.Item>
+            </Col>
+            <Row gutter={20}>
+              <Col span={12}>
+                <Form.Item
+                  name="nm_money"
+                  label="普通金额"
+                  rules={[{ required: true, message: '请输入普通金额' }]}
+                >
+                  <InputNumber
+                    min={300}
+                    max={500}
+                    controls={false}
+                    addonBefore={reduceIcon1}
+                    addonAfter={addIcon1}
+                    readOnly
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="p_limit"
+                  label="人数"
+                  rules={[{ required: true, message: '请输入课程人数' }]}
+                >
+                  <InputNumber
+                    min={5}
+                    max={12}
+                    controls={false}
+                    addonBefore={reduceIcon2}
+                    addonAfter={addIcon2}
+                    readOnly
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
 
-        <div className="btn_ope">
-          <Button onClick={onClose} style={{ float: 'left' }}>
-            取消
-          </Button>
-          <Button onClick={onFinish} type="primary" style={{ float: 'right' }}>
-            提交
-          </Button>
-        </div>
-      </Drawer>
-    </div>
+          <div className="btn_ope">
+            <Button onClick={onClose} style={{ float: 'left' }}>
+              取消
+            </Button>
+            <Button
+              onClick={onFinish}
+              type="primary"
+              style={{ float: 'right' }}
+            >
+              提交
+            </Button>
+          </div>
+        </Drawer>
+      </div>
+    )
   );
 };
 

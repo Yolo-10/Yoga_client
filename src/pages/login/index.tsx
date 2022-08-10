@@ -1,6 +1,7 @@
 import React from 'react';
-import { useHistory } from 'umi';
+import { useHistory, useModel } from 'umi';
 import { Button, Form, Input, message } from 'antd';
+import decode from 'jwt-decode';
 import { LoginApi } from '@/services/api';
 import { Svg } from '@/components';
 import jwt from '@/util/token';
@@ -8,7 +9,7 @@ import './index.less';
 
 export default function Login() {
   const history = useHistory();
-
+  const { initialState, setInitialState } = useModel('@@initialState');
   const onFinish = async (values: any) => {
     await LoginApi({
       params: {
@@ -18,16 +19,29 @@ export default function Login() {
     })
       .then((res) => {
         if (res.status == 0) {
+          //保存token,并提示用户
           jwt.saveToken(res.data);
-          message.success(res.message);
+          message.success('登录成功');
+
+          //修改全局的initState,已经登录
+          setInitialState({
+            isLogin: true,
+            userInfo: decode(res.data),
+          });
+
+          //页面跳转
           setTimeout(() => history.push('/'), 1000);
         } else {
-          message.error(res.message);
+          message.error('用户名或密码错误');
         }
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const returnInit = () => {
+    history.push('/');
   };
 
   return (
@@ -76,6 +90,9 @@ export default function Login() {
               登录
             </Button>
           </Form.Item>
+          <Button type="primary" danger className="cancel" onClick={returnInit}>
+            取消
+          </Button>
         </Form>
       </div>
     </div>

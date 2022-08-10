@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwt from '@/util/token';
+import { message } from 'antd';
 
 const BASE_URL = {
   // baseURL: 'api',
@@ -29,9 +30,7 @@ instance.interceptors.response.use(
     const errRes = error.response;
     if (errRes.status === 401) {
       jwt.removeToken();
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 2);
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   },

@@ -1,10 +1,14 @@
 import { Switch, Modal } from 'antd';
+import { useModel } from 'umi';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { AddDefaultApi } from '@/services/api';
 import { Svg } from '@/components';
 
 export default function Item(props: any) {
+  const {
+    initialState: { userInfo },
+  } = useModel('@@initialState');
   const {
     u_item: { u_id, u_name, appo_time, time },
     classDay,
@@ -66,13 +70,15 @@ export default function Item(props: any) {
       <li>{app_t}</li>
       <li>{isAppo ? na_money : nm_money}</li>
       {/* 是否禁用：课程未结束或已加黑名单；选中就加进黑名单 */}
-      <li>
-        <Switch
-          disabled={blacklist || !isClassEnd}
-          checked={blacklist}
-          onClick={showConfirm}
-        />
-      </li>
+      {userInfo?.u_type == 0 ? (
+        <li>
+          <Switch
+            disabled={blacklist || !isClassEnd}
+            checked={blacklist}
+            onClick={showConfirm}
+          />
+        </li>
+      ) : null}
     </ul>
   );
 }

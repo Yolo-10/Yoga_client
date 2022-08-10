@@ -1,34 +1,72 @@
 import { useEffect, useState } from 'react';
-import { Calendar, Alert, message } from 'antd';
-import { Link, useHistory } from 'umi';
+import { Link, useHistory, useModel } from 'umi';
+import { Calendar, Alert, message, Modal } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
-import { GetMonClassApi, GetTodayClassApi } from '@/services/api';
+import {
+  GetMonClassApi,
+  GetDayClassApi,
+  GetMonSignupNumApi,
+} from '@/services/api';
 import { AddForm, Svg } from '@/components';
 import yogaImg from '@/static/yoga.svg';
 import jwt from '@/util/token';
 import './index.less';
 
 const IndexPage = () => {
+  const { confirm } = Modal;
+  const { initialState, setInitialState } = useModel('@@initialState');
+  const history = useHistory();
   const [canAdd, setCanAdd] = useState(true);
   const [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
   const [choseMonth, setChoseMonth] = useState(moment().format('YYYY-MM'));
   const [isAdd, setIsAdd] = useState(false);
   const [monClassArr, setMonClassArr] = useState([]);
   const [todayClassArr, setTodayClassArr] = useState([]);
-  const history = useHistory();
+  // const [monSignupNum, setMonSignupNum] = useState([]);
 
   const DateCellRender = (value: Moment) => {
-    return monClassArr.map((item: any) => {
-      return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ? (
-        <Link
-          className="item"
-          key={item.c_id}
-          to={jwt.getUser() == null ? '/login' : `/dea?c_id=${item.c_id}`}
-        >
-          {item.c_name === 'yoga' ? <img src={yogaImg} alt="" /> : ''}
-        </Link>
-      ) : null;
+    return (
+      <div>
+        {/* {monSignupNum.map((item: any) => {
+          return value.isSame(moment(item.day, 'YYYY-MM-DD'), 'day') ?
+            <div className='signupNum' key={item.day}>{item.cnt}</div> : null;
+        })} */}
+        {monClassArr.map((item: any) => {
+          return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ? (
+            <Link
+              className="item"
+              key={item.c_id}
+              // to={jwt.getUser() == null ? '/login' : `/dea?c_id=${item.c_id}`}
+              to={`/dea?c_id=${item.c_id}`}
+            >
+              {item.c_name === 'yoga' ? <img src={yogaImg} alt="" /> : ''}
+              <div className="signupNum">{item.num ? item.num : 0}</div>
+            </Link>
+          ) : null;
+        })}
+      </div>
+    );
+  };
+
+  //弹出确认退出账号框
+  const showConfirm = () => {
+    confirm({
+      title: `确认退出账号吗? `,
+      icon: (
+        <span>
+          <Svg id={'za_notice'} size={24} color={`#faad14`} />
+        </span>
+      ),
+      onOk() {
+        jwt.removeToken();
+        setInitialState({
+          isLogin: false,
+          userInfo: null,
+        });
+        window.location.href = '/';
+        message.success('退出账号');
+      },
     });
   };
 
@@ -37,9 +75,7 @@ const IndexPage = () => {
     let token = jwt.getToken();
     if (token) {
       //退出账号
-      jwt.removeToken();
-      window.location.href = '/';
-      message.success('退出账号');
+      showConfirm();
     } else {
       history.push('/login');
     }
@@ -63,8 +99,9 @@ const IndexPage = () => {
     setChoseMonth(value.format('YYYY-MM'));
   };
 
-  const getMonClass = async () => {
-    await GetMonClassApi({ params: { Mon: choseMonth } })
+  //获取某月的课程信息
+  const getMonClass = async (month: string) => {
+    await GetMonClassApi({ params: { Mon: month } })
       .then((res) => {
         if (res.status === 1) {
           setMonClassArr(res.data);
@@ -73,8 +110,9 @@ const IndexPage = () => {
       .catch((err) => console.log(err));
   };
 
-  const getTodayClass = async () => {
-    await GetTodayClassApi({ params: { Today: choseDay } })
+  //获取某天的课程信息---当天
+  const getTodayClass = async (day: string) => {
+    await GetDayClassApi({ params: { Today: day } })
       .then((res) => {
         if (res.status === 1) {
           setTodayClassArr(res.data);
@@ -83,14 +121,26 @@ const IndexPage = () => {
       .catch((err) => console.log(err));
   };
 
+  //每天的报名人数
+  // const getSignupNumber = async (month: string) => {
+  //   await GetMonSignupNumApi({ params: { Mon: month } })
+  //     .then((res) => {
+  //       if (res.status === 1) {
+  //         setMonSignupNum(res.data);
+  //       }
+  //     })
+  //     .catch((err) => console.log(err));
+  // }
+
   //日历课程动态监听
   useEffect(() => {
-    getMonClass();
+    getMonClass(choseMonth);
+    // getSignupNumber(choseMonth);
   }, [choseMonth, isAdd]);
 
   //头部信息
   useEffect(() => {
-    getTodayClass();
+    getTodayClass(moment().format('YYYY-MM-DD'));
   }, [isAdd]);
 
   return (

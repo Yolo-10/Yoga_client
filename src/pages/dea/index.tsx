@@ -1,17 +1,28 @@
 import { useEffect, useState } from 'react';
-import { history } from 'umi';
-import { Alert } from 'antd';
+import { history, useModel } from 'umi';
+import { Alert, Button } from 'antd';
 import moment from 'moment';
-import { GetClassByIdApi, GetSignupUsersApi } from '@/services/api';
+import {
+  DelSignupClassApi,
+  GetClassByIdApi,
+  GetSignupUsersApi,
+  SignupClassApi,
+  GetIsBlackApi,
+} from '@/services/api';
 import { Item, Svg } from '@/components';
 import yogaImg from '@/static/yoga.svg';
 import './index.less';
 
 export default function dea(props: any) {
   const { c_id } = props.location.query;
+  const {
+    initialState: { isLogin, userInfo },
+  } = useModel('@@initialState');
   const [users, setUsers] = useState([]);
+  const [signupTime, setSignupTime] = useState('');
+  const [isBlack, setIsBlack] = useState(true);
   //初始假设课程未结束
-  const [isClassEnd, setIsClassEnd] = useState(false);
+  const [isClassEnd, setIsClassEnd] = useState(true);
   const [item, setItem] = useState({
     c_id: '',
     c_name: '',
@@ -21,8 +32,13 @@ export default function dea(props: any) {
     p_limit: 0,
   });
 
+  //返回上一页面
   const returnBefore = () => {
     history.go(-1);
+  };
+  const handleSignup = () => {
+    //报名/退选课程
+    signupTime.length == 0 ? signupClass() : delSignupClass();
   };
 
   //请求课程头部信息
@@ -37,8 +53,27 @@ export default function dea(props: any) {
       })
       .catch((err) => console.log(err));
   };
-  // 请求报名列表
-  const getSignupUsers = async () => {
+  // 初始页面——请求报名列表（判定是否已经选中）
+  const getSignupUsersInit = () => {
+    GetSignupUsersApi({
+      params: {
+        c_id: c_id,
+      },
+    })
+      .then((res) => {
+        if (res.status == 1) {
+          // 如果返回的报名列表中存在本用户，标记为已经报名
+          let thisUserSignup = res.data.find(
+            (obj: { u_id: any }, i: any) => obj.u_id == userInfo.u_id,
+          );
+          thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
+          setUsers(res.data);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  // 请求报名列表（直接获取所有报名列表，渲染）
+  const getSignupUsers = () => {
     GetSignupUsersApi({
       params: {
         c_id: c_id,
@@ -47,90 +82,175 @@ export default function dea(props: any) {
       .then((res) => {
         if (res.status == 1) {
           setUsers(res.data);
+          console.log(res.data);
         }
       })
       .catch((err) => console.log(err));
   };
+  //报名该课程
+  const signupClass = async () => {
+    let { c_id, c_name } = item,
+      { u_id, u_name } = userInfo,
+      appo_time = moment().format('YYYY-MM-DD HH:mm:ss');
+    SignupClassApi({ c_id, c_name, u_id, u_name, appo_time })
+      .then((res) => {
+        if (res.data.affectedRows > 0) {
+          //报名了
+          setSignupTime(appo_time);
+          //重新获取报名列表
+          getSignupUsers();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  //退选该课程
+  const delSignupClass = async () => {
+    let { c_id } = item,
+      { u_id } = userInfo;
+    DelSignupClassApi({ c_id, u_id })
+      .then((res) => {
+        if (res.data.affectedRows > 0) {
+          //不报名了
+          setSignupTime('');
+          //重新获取报名列表
+          getSignupUsers();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  //本用户是否已经加入黑名单
+  const getIsBlack = async () => {
+    let { u_id, u_type } = userInfo;
+    u_type == 1
+      ? GetIsBlackApi({
+          params: {
+            u_id: u_id,
+          },
+        })
+          .then((res) => {
+            if (res.status == 1 && res.data.length < 1) {
+              setIsBlack(false);
+            }
+          })
+          .catch((err) => console.log(err))
+      : null;
+  };
 
+  useEffect(() => {
+    if (isLogin) {
+      getClassById();
+      getSignupUsersInit();
+      getIsBlack();
+    } else {
+      history.replace('/login');
+    }
+  }, []);
+
+  //因为请求课程信息太慢，故此处是监听item的变化，而非页面初始化时执行
   useEffect(() => {
     //检测课程是否已经结束
     let classEndTime =
       item.time.substring(0, 10) + ' ' + item.time.substring(17, 22);
-    if (moment(classEndTime, moment.ISO_8601).isBefore(moment())) {
-      setIsClassEnd(true);
+    if (moment(classEndTime, moment.ISO_8601).isAfter(moment())) {
+      setIsClassEnd(false);
     }
   }, [item]);
 
-  useEffect(() => {
-    getClassById();
-    getSignupUsers();
-  }, []);
-
   return (
     <div className="page_dea">
-      <header>
-        <div onClick={returnBefore}>
-          <Svg id={'arr_e_left'} size={24} color={`#262626`} />
-        </div>
-        <span>课程详情</span>
-      </header>
-      <Alert
-        message={
-          <div>
-            <span>{item?.time.substring(5)}</span>
-            <span>{item?.place}</span>
-          </div>
-        }
-        icon={
-          <div className="item">
-            <img src={yogaImg} alt="" />
-          </div>
-        }
-        showIcon
-      ></Alert>
-      <div className="hd_des">
-        <div>
-          普通金额：
-          {(
-            Number(item.nm_money) / (users.length > 5 ? users.length : 5)
-          ).toFixed(2)}
-        </div>
-        <div>
-          非预约金额：
-          {(
-            (Number(item.nm_money) / (users.length > 5 ? users.length : 5)) *
-            1.5
-          ).toFixed(2)}
-        </div>
-        <div>人数：{item?.p_limit}</div>
-      </div>
       <div>
-        <ul className="list_hd">
-          <li>学员</li>
-          <li>时间</li>
-          <li>学费</li>
-          <li>黑名单</li>
-        </ul>
-        <div className="list_bd">
-          {users?.map((u_item, i) => (
-            <Item
-              u_item={u_item}
-              classDay={item?.time}
-              key={i}
-              c_id={item?.c_id}
-              isClassEnd={isClassEnd}
-              nm_money={(
-                Number(item.nm_money) / (users.length > 5 ? users.length : 5)
-              ).toFixed(2)}
-              na_money={(
-                (Number(item.nm_money) /
-                  (users.length > 5 ? users.length : 5)) *
-                1.5
-              ).toFixed(2)}
-            />
-          ))}
+        <header>
+          <div onClick={returnBefore}>
+            <Svg id={'arr_e_left'} size={24} color={`#262626`} />
+          </div>
+          <span>课程详情</span>
+        </header>
+        <Alert
+          message={
+            <div>
+              <span>{item?.time.substring(5)}</span>
+              <span>{item?.place}</span>
+            </div>
+          }
+          icon={
+            <div className="item">
+              <img src={yogaImg} alt="" />
+            </div>
+          }
+          showIcon
+        ></Alert>
+        <div className="hd_des">
+          <div>
+            普通金额：
+            {(
+              Number(item.nm_money) / (users.length > 5 ? users.length : 5)
+            ).toFixed(2)}
+          </div>
+          <div>
+            非预约金额：
+            {(
+              (Number(item.nm_money) / (users.length > 5 ? users.length : 5)) *
+              1.5
+            ).toFixed(2)}
+          </div>
+          <div>人数：{item?.p_limit}</div>
+        </div>
+        <div>
+          <ul className="list_hd">
+            <li>学员</li>
+            <li>时间</li>
+            <li>学费</li>
+            {userInfo?.u_type == 0 ? <li>黑名单</li> : null}
+          </ul>
+          <div className="list_bd">
+            {users?.map((u_item, i) => (
+              <Item
+                u_item={u_item}
+                classDay={item?.time}
+                key={i}
+                c_id={item?.c_id}
+                isClassEnd={isClassEnd}
+                nm_money={(
+                  Number(item.nm_money) / (users.length > 5 ? users.length : 5)
+                ).toFixed(2)}
+                na_money={(
+                  (Number(item.nm_money) /
+                    (users.length > 5 ? users.length : 5)) *
+                  1.5
+                ).toFixed(2)}
+              />
+            ))}
+          </div>
         </div>
       </div>
+
+      {/*未登录、管理员、课程已经结束  -------->没有报名按钮 */}
+      {!isLogin ||
+      userInfo?.u_type == 0 ||
+      isClassEnd ? null : // 人数已经报满？
+      item.p_limit <= users.length && signupTime.length == 0 ? (
+        <button className="ft_btn disabled" disabled={true}>
+          报名人数已满
+        </button>
+      ) : isBlack ? (
+        <button className="ft_btn disabled" disabled={true}>
+          无报名权限
+        </button>
+      ) : //还没报名？
+      signupTime.length == 0 ? (
+        <button className="ft_btn" onClick={handleSignup}>
+          报名
+        </button>
+      ) : //今天报名的？
+      moment(signupTime).isSame(moment(), 'day') ? (
+        <button className="ft_btn dan" onClick={handleSignup}>
+          退选
+        </button>
+      ) : (
+        <button className="ft_btn disabled" disabled={true}>
+          退选
+        </button>
+      )}
     </div>
   );
 }
