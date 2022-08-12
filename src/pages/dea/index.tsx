@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import { Alert, Button } from 'antd';
+import { Alert } from 'antd';
 import moment from 'moment';
 import {
   DelSignupClassApi,
@@ -10,11 +10,10 @@ import {
   GetIsBlackApi,
 } from '@/services/api';
 import { Item, Svg } from '@/components';
-import yogaImg from '@/static/yoga.svg';
 import './index.less';
 
 export default function dea(props: any) {
-  const { c_id } = props.location.query;
+  const { c_id, c_name } = props.location.query;
   const {
     initialState: { isLogin, userInfo },
   } = useModel('@@initialState');
@@ -89,7 +88,7 @@ export default function dea(props: any) {
   };
   //报名该课程
   const signupClass = async () => {
-    let { c_id, c_name } = item,
+    let { c_id } = item,
       { u_id, u_name } = userInfo,
       appo_time = moment().format('YYYY-MM-DD HH:mm:ss');
     SignupClassApi({ c_id, c_name, u_id, u_name, appo_time })
@@ -128,8 +127,8 @@ export default function dea(props: any) {
           },
         })
           .then((res) => {
-            if (res.status == 1 && res.data.length < 1) {
-              setIsBlack(false);
+            if (res.status == 1) {
+              setIsBlack(res.data);
             }
           })
           .catch((err) => console.log(err))
@@ -168,39 +167,43 @@ export default function dea(props: any) {
         <Alert
           message={
             <div>
-              <span>{item?.time.substring(5)}</span>
-              <span>{item?.place}</span>
+              {item.time.substring(5) + '  ' + item.place}
+              {/* <span>{item?.time.substring(5)}</span>
+              <span>{item?.place}</span> */}
             </div>
           }
           icon={
             <div className="item">
-              <img src={yogaImg} alt="" />
+              <img
+                src={require('@/static/' + c_name + '.svg')}
+                alt="课程类别"
+              />
             </div>
           }
           showIcon
         ></Alert>
         <div className="hd_des">
           <div>
-            普通金额：
+            预约：
             {(
               Number(item.nm_money) / (users.length > 5 ? users.length : 5)
             ).toFixed(2)}
           </div>
           <div>
-            非预约金额：
+            非预约：
             {(
               (Number(item.nm_money) / (users.length > 5 ? users.length : 5)) *
               1.5
             ).toFixed(2)}
           </div>
-          <div>人数：{item?.p_limit}</div>
+          <div>人数限制：{item?.p_limit}</div>
         </div>
         <div>
           <ul className="list_hd">
             <li>学员</li>
             <li>时间</li>
             <li>学费</li>
-            {userInfo?.u_type == 0 ? <li>黑名单</li> : null}
+            {userInfo?.u_type == 0 ? <li>未上课</li> : null}
           </ul>
           <div className="list_bd">
             {users?.map((u_item, i) => (
@@ -225,10 +228,8 @@ export default function dea(props: any) {
       </div>
 
       {/*未登录、管理员、课程已经结束  -------->没有报名按钮 */}
-      {!isLogin ||
-      userInfo?.u_type == 0 ||
-      isClassEnd ? null : // 人数已经报满？
-      item.p_limit <= users.length && signupTime.length == 0 ? (
+      {!isLogin || userInfo?.u_type == 0 || isClassEnd ? null : item.p_limit <= // 人数已经报满？
+          users.length && signupTime.length == 0 ? (
         <button className="ft_btn disabled" disabled={true}>
           报名人数已满
         </button>

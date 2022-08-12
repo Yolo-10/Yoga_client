@@ -3,11 +3,7 @@ import { Link, useHistory, useModel } from 'umi';
 import { Calendar, Alert, message, Modal } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
-import {
-  GetMonClassApi,
-  GetDayClassApi,
-  GetMonSignupNumApi,
-} from '@/services/api';
+import { GetMonClassApi, GetDayClassApi } from '@/services/api';
 import { AddForm, Svg } from '@/components';
 import yogaImg from '@/static/yoga.svg';
 import jwt from '@/util/token';
@@ -23,24 +19,22 @@ const IndexPage = () => {
   const [isAdd, setIsAdd] = useState(false);
   const [monClassArr, setMonClassArr] = useState([]);
   const [todayClassArr, setTodayClassArr] = useState([]);
-  // const [monSignupNum, setMonSignupNum] = useState([]);
 
   const DateCellRender = (value: Moment) => {
     return (
       <div>
-        {/* {monSignupNum.map((item: any) => {
-          return value.isSame(moment(item.day, 'YYYY-MM-DD'), 'day') ?
-            <div className='signupNum' key={item.day}>{item.cnt}</div> : null;
-        })} */}
         {monClassArr.map((item: any) => {
           return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ? (
             <Link
               className="item"
               key={item.c_id}
-              // to={jwt.getUser() == null ? '/login' : `/dea?c_id=${item.c_id}`}
-              to={`/dea?c_id=${item.c_id}`}
+              to={`/dea?c_id=${item.c_id}&c_name=${item.c_name}`}
             >
-              {item.c_name === 'yoga' ? <img src={yogaImg} alt="" /> : ''}
+              {item.c_name ? (
+                <img src={require('@/static/' + item.c_name + '.svg')} alt="" />
+              ) : (
+                ''
+              )}
               <div className="signupNum">{item.num ? item.num : 0}</div>
             </Link>
           ) : null;
@@ -121,17 +115,6 @@ const IndexPage = () => {
       .catch((err) => console.log(err));
   };
 
-  //每天的报名人数
-  // const getSignupNumber = async (month: string) => {
-  //   await GetMonSignupNumApi({ params: { Mon: month } })
-  //     .then((res) => {
-  //       if (res.status === 1) {
-  //         setMonSignupNum(res.data);
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
-
   //日历课程动态监听
   useEffect(() => {
     getMonClass(choseMonth);
@@ -151,13 +134,14 @@ const IndexPage = () => {
             key={item.c_id}
             message={
               <div>
-                <span>{item.time.substring(5)}</span>
-                <span>{item.place}</span>
+                {/* <span>{item.time.substring(5)}</span>
+                <span>{item.place}</span> */}
+                {item.time.substring(5) + '  ' + item.place}
               </div>
             }
             icon={
               <div className="item">
-                <img src={yogaImg} alt="" />
+                <img src={require('@/static/' + item.c_name + '.svg')} alt="" />
               </div>
             }
             showIcon

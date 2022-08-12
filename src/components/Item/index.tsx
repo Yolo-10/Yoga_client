@@ -24,7 +24,7 @@ export default function Item(props: any) {
 
   const showConfirm = () => {
     confirm({
-      title: `确认将 ${u_name} 加入黑名单吗?`,
+      title: `确认 ${u_name} 未上课?`,
       icon: (
         <span>
           <Svg id={'za_notice'} size={24} color={`#faad14`} />

@@ -28,7 +28,7 @@ export default defineConfig({
     // 默认为true。为true时，会使用`navigator.language`覆盖默认。为false时，则使用默认语言
     baseNavigator: false,
   },
-  //  proxy: {
+  // proxy: {
   //   '/api': {
   //     target: 'http://localhost:8000',
   //     pathRewrite: { '^/api': '' },
