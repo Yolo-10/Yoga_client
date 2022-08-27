@@ -27,7 +27,6 @@ export default function dea(props: any) {
     c_name: '',
     time: '',
     place: '',
-    nm_money: '0.00',
     p_limit: 0,
   });
 
@@ -165,19 +164,10 @@ export default function dea(props: any) {
           <span>课程详情</span>
         </header>
         <Alert
-          message={
-            <div>
-              {item.time.substring(5) + '  ' + item.place}
-              {/* <span>{item?.time.substring(5)}</span>
-              <span>{item?.place}</span> */}
-            </div>
-          }
+          message={<div>{item.time.substring(5) + '  ' + item.place}</div>}
           icon={
             <div className="item">
-              <img
-                src={require('/public/static/' + c_name + '.svg')}
-                alt="课程类别"
-              />
+              <img src={'/static/' + c_name + '.svg'} alt="课程类别" />
             </div>
           }
           showIcon
@@ -186,9 +176,15 @@ export default function dea(props: any) {
           <div>报名人数：{users?.length || 0}</div>
           <div>
             人均学费：
-            {(
-              Number(item.nm_money) / (users.length > 5 ? users.length : 5)
-            ).toFixed(2)}
+            {users?.length <= 4
+              ? 75
+              : users.length <= 6
+              ? 65
+              : users.length <= 8
+              ? 60
+              : users.length <= 10
+              ? 55
+              : 50}
           </div>
         </div>
         <div>
@@ -206,14 +202,17 @@ export default function dea(props: any) {
                 key={i}
                 c_id={item?.c_id}
                 isClassEnd={isClassEnd}
-                nm_money={(
-                  Number(item.nm_money) / (users.length > 5 ? users.length : 5)
-                ).toFixed(2)}
-                na_money={(
-                  (Number(item.nm_money) /
-                    (users.length > 5 ? users.length : 5)) *
-                  1.5
-                ).toFixed(2)}
+                money={
+                  users?.length <= 4
+                    ? 75
+                    : users.length <= 6
+                    ? 65
+                    : users.length <= 8
+                    ? 60
+                    : users.length <= 10
+                    ? 55
+                    : 50
+                }
               />
             ))}
           </div>

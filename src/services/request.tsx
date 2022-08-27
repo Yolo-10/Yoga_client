@@ -2,8 +2,8 @@ import axios from 'axios';
 import jwt from '@/util/token';
 
 const BASE_URL = {
-  baseURL: 'api',
-  // baseURL: 'http://110.42.230.161/',
+  // baseURL: 'api',
+  baseURL: 'http://110.42.230.161/',
 };
 
 const instance = axios.create(BASE_URL);

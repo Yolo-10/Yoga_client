@@ -13,8 +13,7 @@ export default function Item(props: any) {
     u_item: { u_id, u_name, appo_time, time },
     classDay,
     c_id,
-    na_money,
-    nm_money,
+    money,
     isClassEnd,
   } = props;
   const app_t = moment(appo_time).format('MM-DD HH:mm');
@@ -68,7 +67,7 @@ export default function Item(props: any) {
     >
       <li>{u_name}</li>
       <li>{app_t}</li>
-      <li>{isAppo ? na_money : nm_money}</li>
+      <li>{money}</li>
       {/* 是否禁用：课程未结束或已加黑名单；选中就加进黑名单 */}
       {userInfo?.u_type == 0 ? (
         <li>
