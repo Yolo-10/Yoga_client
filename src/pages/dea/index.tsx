@@ -175,7 +175,7 @@ export default function dea(props: any) {
           icon={
             <div className="item">
               <img
-                src={require('@/static/' + c_name + '.svg')}
+                src={require('/public/static/' + c_name + '.svg')}
                 alt="课程类别"
               />
             </div>
@@ -183,20 +183,13 @@ export default function dea(props: any) {
           showIcon
         ></Alert>
         <div className="hd_des">
+          <div>报名人数：{users?.length || 0}</div>
           <div>
-            预约：
+            人均学费：
             {(
               Number(item.nm_money) / (users.length > 5 ? users.length : 5)
             ).toFixed(2)}
           </div>
-          <div>
-            非预约：
-            {(
-              (Number(item.nm_money) / (users.length > 5 ? users.length : 5)) *
-              1.5
-            ).toFixed(2)}
-          </div>
-          <div>人数限制：{item?.p_limit}</div>
         </div>
         <div>
           <ul className="list_hd">

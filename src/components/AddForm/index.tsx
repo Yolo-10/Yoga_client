@@ -14,7 +14,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { AddClassApi } from '@/services/api';
-
+60;
 const AddForm = (props: any) => {
   const {
     initialState: { isLogin, userInfo },
@@ -30,7 +30,7 @@ const AddForm = (props: any) => {
     setVisible(false);
   };
   const onFinish = async () => {
-    const { c_name, began_time, time_step, place, nm_money, p_limit } =
+    const { c_name, began_time, time_step, place, p_limit } =
       form.getFieldsValue();
     //计算整个课程的时间段
     let end_time = moment(began_time).add(time_step, 'minutes');
@@ -41,7 +41,7 @@ const AddForm = (props: any) => {
       '-' +
       end_time.format('HH:mm');
     //发送请求
-    await AddClassApi({ c_name, time, place, nm_money, p_limit })
+    await AddClassApi({ c_name, time, place, p_limit })
       .then((res) => {
         if (res.status === 1) {
           setVisible(false);
@@ -73,17 +73,11 @@ const AddForm = (props: any) => {
   };
 
   //加减事件注册 + 图标声明
-  const addIcon1 = (
-    <div onClick={() => changeNumber('nm_money', true, 10, 300, 500)}>+</div>
-  );
-  const reduceIcon1 = (
-    <div onClick={() => changeNumber('nm_money', false, 10, 300, 500)}>-</div>
-  );
   const addIcon2 = (
-    <div onClick={() => changeNumber('p_limit', true, 1, 5, 12)}>+</div>
+    <div onClick={() => changeNumber('p_limit', true, 1, 4, 12)}>+</div>
   );
   const reduceIcon2 = (
-    <div onClick={() => changeNumber('p_limit', false, 1, 5, 12)}>-</div>
+    <div onClick={() => changeNumber('p_limit', false, 1, 4, 12)}>-</div>
   );
 
   return (
@@ -111,8 +105,6 @@ const AddForm = (props: any) => {
             initialValues={{
               c_name: 'yoga',
               place: '师生活动中心2-108',
-              nm_money: 400,
-              na_money: 60.0,
               p_limit: 10,
               began_time: moment('17:00', 'HH:mm'),
               time_step: '90',
@@ -141,6 +133,7 @@ const AddForm = (props: any) => {
               <Form.Item label="时长(分钟)" name="time_step">
                 <Radio.Group buttonStyle="solid">
                   <Radio.Button value="60">60</Radio.Button>
+                  <Radio.Button value="75">75</Radio.Button>
                   <Radio.Button value="90">90</Radio.Button>
                   <Radio.Button value="120">120</Radio.Button>
                   <Radio.Button value="150">150</Radio.Button>
@@ -157,40 +150,22 @@ const AddForm = (props: any) => {
                 <Input placeholder="请输入地点" allowClear={true} />
               </Form.Item>
             </Col>
-            <Row gutter={20}>
-              <Col span={12}>
-                <Form.Item
-                  name="nm_money"
-                  label="普通金额"
-                  rules={[{ required: true, message: '请输入普通金额' }]}
-                >
-                  <InputNumber
-                    min={300}
-                    max={500}
-                    controls={false}
-                    addonBefore={reduceIcon1}
-                    addonAfter={addIcon1}
-                    readOnly
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="p_limit"
-                  label="人数"
-                  rules={[{ required: true, message: '请输入课程人数' }]}
-                >
-                  <InputNumber
-                    min={5}
-                    max={12}
-                    controls={false}
-                    addonBefore={reduceIcon2}
-                    addonAfter={addIcon2}
-                    readOnly
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Col span={12}>
+              <Form.Item
+                name="p_limit"
+                label="人数"
+                rules={[{ required: true, message: '请输入课程人数' }]}
+              >
+                <InputNumber
+                  min={4}
+                  max={12}
+                  controls={false}
+                  addonBefore={reduceIcon2}
+                  addonAfter={addIcon2}
+                  readOnly
+                />
+              </Form.Item>
+            </Col>
           </Form>
 
           <div className="btn_ope">
@@ -200,7 +175,7 @@ const AddForm = (props: any) => {
             <Button
               onClick={onFinish}
               type="primary"
-              style={{ float: 'right' }}
+              style={{ float: 'right', margin: '0 0 0 20px' }}
             >
               提交
             </Button>

@@ -5,7 +5,7 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import { GetMonClassApi, GetDayClassApi } from '@/services/api';
 import { AddForm, Svg } from '@/components';
-import yogaImg from '@/static/yoga.svg';
+import yogaImg from '/public/static/yoga.svg';
 import jwt from '@/util/token';
 import './index.less';
 
@@ -31,7 +31,10 @@ const IndexPage = () => {
               to={`/dea?c_id=${item.c_id}&c_name=${item.c_name}`}
             >
               {item.c_name ? (
-                <img src={require('@/static/' + item.c_name + '.svg')} alt="" />
+                <img
+                  src={require('/public/static/' + item.c_name + '.svg')}
+                  alt=""
+                />
               ) : (
                 ''
               )}
