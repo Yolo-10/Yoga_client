@@ -22,6 +22,7 @@ export default function dea(props: any) {
   const [isBlack, setIsBlack] = useState(true);
   //初始假设课程未结束
   const [isClassEnd, setIsClassEnd] = useState(true);
+  const [realP, setRealP] = useState(0);
   const [item, setItem] = useState({
     c_id: '',
     c_name: '',
@@ -154,6 +155,10 @@ export default function dea(props: any) {
     }
   }, [item]);
 
+  useEffect(() => {
+    setRealP(users.length);
+  }, [users]);
+
   return (
     <div className="page_dea">
       <div>
@@ -176,13 +181,22 @@ export default function dea(props: any) {
           <div>报名人数：{users?.length || 0}</div>
           <div>
             人均学费：
-            {users?.length <= 4
+            {/* {users?.length <= 4
               ? 75
               : users.length <= 6
+                ? 65
+                : users.length <= 8
+                  ? 60
+                  : users.length <= 10
+                    ? 55
+                    : 50} */}
+            {realP <= 4
+              ? 75
+              : realP <= 6
               ? 65
-              : users.length <= 8
+              : realP <= 8
               ? 60
-              : users.length <= 10
+              : realP <= 10
               ? 55
               : 50}
           </div>
@@ -190,9 +204,7 @@ export default function dea(props: any) {
         <div>
           <ul className="list_hd">
             <li>学员</li>
-            <li>时间</li>
-            <li>学费</li>
-            {userInfo?.u_type == 0 ? <li>未上课</li> : null}
+            {userInfo?.u_type == 0 ? <li>缺席</li> : null}
           </ul>
           <div className="list_bd">
             {users?.map((u_item, i) => (
@@ -202,23 +214,19 @@ export default function dea(props: any) {
                 key={i}
                 c_id={item?.c_id}
                 isClassEnd={isClassEnd}
-                money={
-                  users?.length <= 4
-                    ? 75
-                    : users.length <= 6
-                    ? 65
-                    : users.length <= 8
-                    ? 60
-                    : users.length <= 10
-                    ? 55
-                    : 50
-                }
+                realP={realP}
+                setRealP={setRealP}
               />
             ))}
           </div>
         </div>
       </div>
-
+      {/* 管理员且未达开课人数 */}
+      {userInfo?.u_type == 0 && realP < 4 ? (
+        <div className="m-bt-notice">离最少开课人数差 {4 - realP} 位</div>
+      ) : (
+        ''
+      )}
       {/*未登录、管理员、课程已经结束  -------->没有报名按钮 */}
       {!isLogin || userInfo?.u_type == 0 || isClassEnd ? null : item.p_limit <= // 人数已经报满？
           users.length && signupTime.length == 0 ? (

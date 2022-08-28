@@ -13,8 +13,9 @@ export default function Item(props: any) {
     u_item: { u_id, u_name, appo_time, time },
     classDay,
     c_id,
-    money,
     isClassEnd,
+    realP,
+    setRealP,
   } = props;
   const app_t = moment(appo_time).format('MM-DD HH:mm');
   const isAppo = classDay.substring(5, 10) == app_t.substring(0, 5);
@@ -23,14 +24,14 @@ export default function Item(props: any) {
 
   const showConfirm = () => {
     confirm({
-      title: `确认 ${u_name} 未上课?`,
+      title: `确认 ${u_name} 缺席?`,
       icon: (
         <span>
           <Svg id={'za_notice'} size={24} color={`#faad14`} />
         </span>
       ),
       onOk() {
-        console.log('OK');
+        console.log('change后', realP);
         setblacklist(!blacklist);
         AddDefaultApi({
           u_id,
@@ -44,15 +45,19 @@ export default function Item(props: any) {
           .catch((err) => console.log(err));
       },
       onCancel() {
-        console.log('Cancel');
+        // console.log('Cancel');
       },
     });
   };
 
   useEffect(() => {
     //如果报名-违规两边联查中违规表中有记录，就是已经加入黑名单的了。
-    time ? setblacklist(true) : null;
+    time ? (setblacklist(true), refreshRealP()) : null;
   }, []);
+
+  const refreshRealP = () => {
+    setRealP(1);
+  };
 
   return (
     // 当课程未结束且当天预约，绿色；当课程结束且加入黑名单，红色;其他，普通
@@ -66,8 +71,6 @@ export default function Item(props: any) {
       }
     >
       <li>{u_name}</li>
-      <li>{app_t}</li>
-      <li>{money}</li>
       {/* 是否禁用：课程未结束或已加黑名单；选中就加进黑名单 */}
       {userInfo?.u_type == 0 ? (
         <li>
