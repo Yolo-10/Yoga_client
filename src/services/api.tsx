@@ -15,8 +15,8 @@ export const GetSignupUsersApi = (data: any) =>
   request.get('/api/dea/getSignupUsers', data);
 export const GetClassByIdApi = (data: any) =>
   request.get('/api/dea/getClassById', data);
-export const GetIsBlackApi = (data: any) =>
-  request.get('/api/dea/getIsBlack', data);
+export const GetBlackTimeApi = (data: any) =>
+  request.get('/api/dea/getBlackTime', data);
 export const AddDefaultApi = (data: any) =>
   request.post('/api/dea/addDefault', data);
 export const SignupClassApi = (data: any) =>

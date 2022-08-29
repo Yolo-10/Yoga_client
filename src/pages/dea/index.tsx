@@ -7,7 +7,7 @@ import {
   GetClassByIdApi,
   GetSignupUsersApi,
   SignupClassApi,
-  GetIsBlackApi,
+  GetBlackTimeApi,
 } from '@/services/api';
 import { Item, Svg } from '@/components';
 import './index.less';
@@ -19,7 +19,7 @@ export default function dea(props: any) {
   } = useModel('@@initialState');
   const [users, setUsers] = useState([]);
   const [signupTime, setSignupTime] = useState('');
-  const [isBlack, setIsBlack] = useState(true);
+  const [isBlack, setIsBlack] = useState(0);
   //初始假设课程未结束
   const [isClassEnd, setIsClassEnd] = useState(true);
   const [realP, setRealP] = useState(0);
@@ -81,7 +81,7 @@ export default function dea(props: any) {
       .then((res) => {
         if (res.status == 1) {
           setUsers(res.data);
-          console.log(res.data);
+          // console.log(res.data);
         }
       })
       .catch((err) => console.log(err));
@@ -118,10 +118,10 @@ export default function dea(props: any) {
       .catch((err) => console.log(err));
   };
   //本用户是否已经加入黑名单
-  const getIsBlack = async () => {
+  const getBlackTime = async () => {
     let { u_id, u_type } = userInfo;
     u_type == 1
-      ? GetIsBlackApi({
+      ? GetBlackTimeApi({
           params: {
             u_id: u_id,
           },
@@ -139,7 +139,7 @@ export default function dea(props: any) {
     if (isLogin) {
       getClassById();
       getSignupUsersInit();
-      getIsBlack();
+      getBlackTime();
     } else {
       history.replace('/login');
     }
@@ -156,7 +156,9 @@ export default function dea(props: any) {
   }, [item]);
 
   useEffect(() => {
-    setRealP(users.length);
+    setRealP(
+      users.reduce((pre, user) => pre - (user?.time ? 1 : 0), users.length),
+    );
   }, [users]);
 
   return (
@@ -181,15 +183,6 @@ export default function dea(props: any) {
           <div>报名人数：{users?.length || 0}</div>
           <div>
             人均学费：
-            {/* {users?.length <= 4
-              ? 75
-              : users.length <= 6
-                ? 65
-                : users.length <= 8
-                  ? 60
-                  : users.length <= 10
-                    ? 55
-                    : 50} */}
             {realP <= 4
               ? 75
               : realP <= 6
@@ -205,6 +198,7 @@ export default function dea(props: any) {
           <ul className="list_hd">
             <li>学员</li>
             {userInfo?.u_type == 0 ? <li>缺席</li> : null}
+            {userInfo?.u_type == 0 ? <li>缺席次数</li> : null}
           </ul>
           <div className="list_bd">
             {users?.map((u_item, i) => (
@@ -214,15 +208,13 @@ export default function dea(props: any) {
                 key={i}
                 c_id={item?.c_id}
                 isClassEnd={isClassEnd}
-                realP={realP}
-                setRealP={setRealP}
               />
             ))}
           </div>
         </div>
       </div>
-      {/* 管理员且未达开课人数 */}
-      {userInfo?.u_type == 0 && realP < 4 ? (
+      {/* 管理员、课程未开始、未达开课人数 */}
+      {userInfo?.u_type == 0 && !isClassEnd && realP < 4 ? (
         <div className="m-bt-notice">离最少开课人数差 {4 - realP} 位</div>
       ) : (
         ''
@@ -233,11 +225,11 @@ export default function dea(props: any) {
         <button className="ft_btn disabled" disabled={true}>
           报名人数已满
         </button>
-      ) : isBlack ? (
-        <button className="ft_btn disabled" disabled={true}>
-          无报名权限
-        </button>
-      ) : //还没报名？
+      ) : // ) : isBlack ? (
+      //   <button className="ft_btn disabled" disabled={true}>
+      //     无报名权限
+      //   </button>
+      //还没报名？
       signupTime.length == 0 ? (
         <button className="ft_btn" onClick={handleSignup}>
           报名

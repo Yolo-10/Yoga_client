@@ -10,16 +10,15 @@ export default function Item(props: any) {
     initialState: { userInfo },
   } = useModel('@@initialState');
   const {
-    u_item: { u_id, u_name, appo_time, time },
+    u_item: { u_id, u_name, appo_time, time, times },
     classDay,
     c_id,
     isClassEnd,
-    realP,
-    setRealP,
   } = props;
   const app_t = moment(appo_time).format('MM-DD HH:mm');
   const isAppo = classDay.substring(5, 10) == app_t.substring(0, 5);
   const [blacklist, setblacklist] = useState(false);
+  const [cnt, setCnt] = useState(0);
   const { confirm } = Modal;
 
   const showConfirm = () => {
@@ -31,8 +30,6 @@ export default function Item(props: any) {
         </span>
       ),
       onOk() {
-        console.log('change后', realP);
-        setblacklist(!blacklist);
         AddDefaultApi({
           u_id,
           u_name,
@@ -40,7 +37,10 @@ export default function Item(props: any) {
           time: moment().format('YYYY:MM:DD HH:mm:ss'),
         })
           .then((res) => {
-            console.log(res);
+            if (res.status == 1) {
+              setblacklist(!blacklist);
+              setCnt(cnt + 1);
+            }
           })
           .catch((err) => console.log(err));
       },
@@ -52,12 +52,9 @@ export default function Item(props: any) {
 
   useEffect(() => {
     //如果报名-违规两边联查中违规表中有记录，就是已经加入黑名单的了。
-    time ? (setblacklist(true), refreshRealP()) : null;
+    time ? setblacklist(true) : null;
+    setCnt(times);
   }, []);
-
-  const refreshRealP = () => {
-    setRealP(1);
-  };
 
   return (
     // 当课程未结束且当天预约，绿色；当课程结束且加入黑名单，红色;其他，普通
@@ -81,6 +78,7 @@ export default function Item(props: any) {
           />
         </li>
       ) : null}
+      {userInfo?.u_type == 0 ? <li>{cnt}</li> : null}
     </ul>
   );
 }
