@@ -2,7 +2,7 @@ import { Switch, Modal } from 'antd';
 import { useModel } from 'umi';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { AddDefaultApi } from '@/services/api';
+import { AddDefaultApi, DelDefApi } from '@/services/api';
 import { Svg } from '@/components';
 
 export default function Item(props: any) {
@@ -14,6 +14,7 @@ export default function Item(props: any) {
     classDay,
     c_id,
     isClassEnd,
+    reduceRealP,
   } = props;
   const app_t = moment(appo_time).format('MM-DD HH:mm');
   const isAppo = classDay.substring(5, 10) == app_t.substring(0, 5);
@@ -39,7 +40,9 @@ export default function Item(props: any) {
           .then((res) => {
             if (res.status == 1) {
               setblacklist(!blacklist);
+              //页面缺席次数展示 增加+1
               setCnt(cnt + 1);
+              reduceRealP(1, 'reduce');
             }
           })
           .catch((err) => console.log(err));
@@ -48,6 +51,19 @@ export default function Item(props: any) {
         // console.log('Cancel');
       },
     });
+  };
+
+  //不缺席了
+  const delDef = () => {
+    DelDefApi({ c_id, u_id })
+      .then((res) => {
+        if (res.data.affectedRows > 0) {
+          setblacklist(!blacklist);
+          setCnt(cnt - 1);
+          reduceRealP(1, 'add');
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -72,9 +88,9 @@ export default function Item(props: any) {
       {userInfo?.u_type == 0 ? (
         <li>
           <Switch
-            disabled={blacklist || !isClassEnd}
+            disabled={!isClassEnd}
             checked={blacklist}
-            onClick={showConfirm}
+            onClick={blacklist ? delDef : showConfirm}
           />
         </li>
       ) : null}

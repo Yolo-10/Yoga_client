@@ -23,3 +23,4 @@ export const SignupClassApi = (data: any) =>
   request.post('/api/dea/signupClass', data);
 export const DelSignupClassApi = (data: any) =>
   request.post('/api/dea/delSignupClass', data);
+export const DelDefApi = (data: any) => request.post('/api/dea/delDef', data);

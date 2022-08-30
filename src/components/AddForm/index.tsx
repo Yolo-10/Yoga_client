@@ -39,19 +39,26 @@ const AddForm = (props: any) => {
       began_time.format('HH:mm') +
       '-' +
       end_time.format('HH:mm');
-    //发送请求
-    await AddClassApi({ c_name, time, place, p_limit })
-      .then((res) => {
-        if (res.status === 1) {
-          setVisible(false);
-          message.success('添加成功');
-          form.resetFields();
-          setIsAdd(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    //当前已过开课时间
+    moment().isAfter(
+      moment(choseDay + ' ' + began_time.format('HH:mm')),
+      'minutes',
+    )
+      ? message.error('上课时间早于当前')
+      : //发送请求
+        await AddClassApi({ c_name, time, place, p_limit })
+          .then((res) => {
+            if (res.status === 1) {
+              setVisible(false);
+              message.success('添加成功');
+              form.resetFields();
+              setIsAdd(true);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
   };
 
   // 加减事件
@@ -103,7 +110,7 @@ const AddForm = (props: any) => {
             hideRequiredMark
             initialValues={{
               c_name: 'yoga',
-              place: '师生活动中心2-108',
+              place: '师生活动中心228',
               p_limit: 10,
               began_time: moment('17:00', 'HH:mm'),
               time_step: '90',
@@ -113,8 +120,8 @@ const AddForm = (props: any) => {
               <Form.Item name="c_name" label="" rules={[{ required: true }]}>
                 <Radio.Group buttonStyle="solid">
                   <Radio.Button value="yoga">瑜伽</Radio.Button>
-                  <Radio.Button value="go">围棋</Radio.Button>
-                  <Radio.Button value="badminton">羽毛球</Radio.Button>
+                  {/* <Radio.Button value="go">围棋</Radio.Button>
+                  <Radio.Button value="badminton">羽毛球</Radio.Button> */}
                 </Radio.Group>
               </Form.Item>
             </Col>

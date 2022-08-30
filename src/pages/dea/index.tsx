@@ -35,11 +35,11 @@ export default function dea(props: any) {
   const returnBefore = () => {
     history.go(-1);
   };
+  //报名退选事件
   const handleSignup = () => {
     //报名/退选课程
     signupTime.length == 0 ? signupClass() : delSignupClass();
   };
-
   //请求课程头部信息
   const getClassById = async () => {
     GetClassByIdApi({
@@ -52,7 +52,7 @@ export default function dea(props: any) {
       })
       .catch((err) => console.log(err));
   };
-  // 初始页面——请求报名列表（判定是否已经选中）
+  // 初始页面——请求报名列表（判定是否已报名该课程）
   const getSignupUsersInit = () => {
     GetSignupUsersApi({
       params: {
@@ -117,35 +117,24 @@ export default function dea(props: any) {
       })
       .catch((err) => console.log(err));
   };
-  //本用户是否已经加入黑名单
-  const getBlackTime = async () => {
-    let { u_id, u_type } = userInfo;
-    u_type == 1
-      ? GetBlackTimeApi({
-          params: {
-            u_id: u_id,
-          },
-        })
-          .then((res) => {
-            if (res.status == 1) {
-              setIsBlack(res.data);
-            }
-          })
-          .catch((err) => console.log(err))
-      : null;
+  //缺席状态改变时，实际人数的变化-->价格变动
+  const reduceRealP = (val: number, op: string) => {
+    setRealP(op == 'add' ? realP + val : realP - val);
   };
 
+  //检测是否登录
   useEffect(() => {
     if (isLogin) {
+      //查询本课程
       getClassById();
+      //报名用户是否报名以及报名列表
       getSignupUsersInit();
-      getBlackTime();
     } else {
       history.replace('/login');
     }
   }, []);
 
-  //因为请求课程信息太慢，故此处是监听item的变化，而非页面初始化时执行
+  //判断课程是否结束---因为请求课程信息太慢，故此处是监听item的变化，而非页面初始化时执行
   useEffect(() => {
     //检测课程是否已经结束
     let classEndTime =
@@ -155,6 +144,7 @@ export default function dea(props: any) {
     }
   }, [item]);
 
+  //获取课程实际到场人数
   useEffect(() => {
     setRealP(
       users.reduce((pre, user) => pre - (user?.time ? 1 : 0), users.length),
@@ -208,42 +198,57 @@ export default function dea(props: any) {
                 key={i}
                 c_id={item?.c_id}
                 isClassEnd={isClassEnd}
+                reduceRealP={reduceRealP}
               />
             ))}
           </div>
         </div>
       </div>
-      {/* 管理员、课程未开始、未达开课人数 */}
-      {userInfo?.u_type == 0 && !isClassEnd && realP < 4 ? (
-        <div className="m-bt-notice">离最少开课人数差 {4 - realP} 位</div>
-      ) : (
-        ''
-      )}
-      {/*未登录、管理员、课程已经结束  -------->没有报名按钮 */}
-      {!isLogin || userInfo?.u_type == 0 || isClassEnd ? null : item.p_limit <= // 人数已经报满？
-          users.length && signupTime.length == 0 ? (
-        <button className="ft_btn disabled" disabled={true}>
-          报名人数已满
-        </button>
-      ) : // ) : isBlack ? (
-      //   <button className="ft_btn disabled" disabled={true}>
-      //     无报名权限
-      //   </button>
-      //还没报名？
-      signupTime.length == 0 ? (
-        <button className="ft_btn" onClick={handleSignup}>
-          报名
-        </button>
-      ) : //今天报名的？
-      moment(signupTime).isSame(moment(), 'day') ? (
-        <button className="ft_btn dan" onClick={handleSignup}>
-          退选
-        </button>
-      ) : (
-        <button className="ft_btn disabled" disabled={true}>
-          退选
-        </button>
-      )}
+
+      <div>
+        {/* 管理员、课程未开始、未达开课人数 */}
+        {!isClassEnd && realP < 4 ? (
+          <span className="m-bt-notice">离最少开课人数差 {4 - realP} 位</span>
+        ) : (
+          ''
+        )}
+
+        {userInfo?.u_type == 0 ? null : (
+          <span className="m-bt-notice">课前1小时 后无法报名或退选课程</span>
+        )}
+
+        {/*未登录、管理员、开课前1小时  -------->没有报名按钮 */}
+        {!isLogin ||
+        userInfo?.u_type == 0 ||
+        !moment().isBefore(
+          moment(item.time.substring(0, 16)).add(-1, 'h'),
+        ) ? null : (
+          <>
+            {item.p_limit <= // 人数已经报满？
+              users.length && signupTime.length == 0 ? (
+              <button className="ft_btn disabled" disabled={true}>
+                报名人数已满
+              </button>
+            ) : //学员登录且课程未结束
+            signupTime.length == 0 ? (
+              <button className="ft_btn" onClick={handleSignup}>
+                报名
+              </button>
+            ) : //上课前一小时可以退选
+            moment().isBefore(
+                moment(item.time.substring(0, 16)).add(-1, 'h'),
+              ) ? (
+              <button className="ft_btn dan" onClick={handleSignup}>
+                退选
+              </button>
+            ) : (
+              <button className="ft_btn disabled" disabled={true}>
+                退选
+              </button>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }
