@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useModel } from 'umi';
-import { Calendar, Alert, message, Modal } from 'antd';
+import {
+  Calendar,
+  Alert,
+  message,
+  Modal,
+  Col,
+  Radio,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 import type { Moment } from 'moment';
+import type { CalendarMode } from 'antd/es/calendar/generateCalendar';
 import moment from 'moment';
 import { GetMonClassApi, GetDayClassApi } from '@/services/api';
 import { AddForm, Svg } from '@/components';
@@ -76,6 +87,7 @@ const IndexPage = () => {
 
   //选择日期发生变化的回调
   const calChange = (value: Moment) => {
+    console.log(value);
     //设置添加按钮的开启
     if (value.isSame(moment(), 'day')) {
       setCanAdd(true);
@@ -126,7 +138,7 @@ const IndexPage = () => {
   }, [isAdd]);
 
   return (
-    <div className="page_init">
+    <div className="page_inityuan">
       {todayClassArr.map((item: any) => {
         return (
           <Alert
@@ -144,19 +156,86 @@ const IndexPage = () => {
               </div>
             }
             showIcon
-          ></Alert>
+          />
         );
       })}
 
       <div className="m_body">
-        <div className="icon_box" onClick={userLogin}>
-          <Svg id={'usr'} size={24} color={`#262626`} />
-        </div>
-        <AddForm canAdd={canAdd} choseDay={choseDay} setIsAdd={setIsAdd} />
         <Calendar
-          dateCellRender={DateCellRender}
           onChange={calChange}
+          fullscreen={false}
+          headerRender={({ value, type, onChange, onTypeChange }) => {
+            const start = 0;
+            const end = 12;
+            const monthOptions = [];
+
+            const current = value.clone();
+            const localeData = value.localeData();
+            const months = [];
+            for (let i = 0; i < 12; i++) {
+              current.month(i);
+              months.push(localeData.monthsShort(current));
+            }
+
+            for (let i = start; i < end; i++) {
+              monthOptions.push(
+                <Select.Option key={i} value={i} className="month-item">
+                  {months[i]}
+                </Select.Option>,
+              );
+            }
+
+            const year = value.year();
+            const month = value.month();
+            const options = [];
+            for (let i = year - 10; i < year + 10; i += 1) {
+              options.push(
+                <Select.Option key={i} value={i} className="year-item">
+                  {i}
+                </Select.Option>,
+              );
+            }
+
+            return (
+              <div className="m-calHeader">
+                <div className="icon_box" onClick={userLogin}>
+                  <Svg id={'usr'} size={24} color={`#262626`} />
+                </div>
+                <div>
+                  <Select
+                    size="large"
+                    dropdownMatchSelectWidth={false}
+                    className="my-year-select"
+                    value={year}
+                    onChange={(newYear) => {
+                      const now = value.clone().year(newYear);
+                      onChange(now);
+                    }}
+                  >
+                    {options}
+                  </Select>
+                  <Select
+                    size="large"
+                    dropdownMatchSelectWidth={false}
+                    value={month}
+                    onChange={(newMonth) => {
+                      const now = value.clone().month(newMonth);
+                      onChange(now);
+                    }}
+                  >
+                    {monthOptions}
+                  </Select>
+                </div>
+                <AddForm
+                  canAdd={canAdd}
+                  choseDay={choseDay}
+                  setIsAdd={setIsAdd}
+                />
+              </div>
+            );
+          }}
           onPanelChange={onPanelChange}
+          dateCellRender={DateCellRender}
         />
       </div>
     </div>
