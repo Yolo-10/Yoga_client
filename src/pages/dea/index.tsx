@@ -7,7 +7,6 @@ import {
   GetClassByIdApi,
   GetSignupUsersApi,
   SignupClassApi,
-  GetBlackTimeApi,
 } from '@/services/api';
 import { Item, Svg } from '@/components';
 import './index.less';
@@ -19,7 +18,6 @@ export default function dea(props: any) {
   } = useModel('@@initialState');
   const [users, setUsers] = useState([]);
   const [signupTime, setSignupTime] = useState('');
-  const [isBlack, setIsBlack] = useState(0);
   //初始假设课程未结束
   const [isClassEnd, setIsClassEnd] = useState(true);
   const [realP, setRealP] = useState(0);
