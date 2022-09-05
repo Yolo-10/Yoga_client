@@ -10,14 +10,11 @@ export default function Item(props: any) {
     initialState: { userInfo },
   } = useModel('@@initialState');
   const {
-    u_item: { u_id, u_name, appo_time, time, times },
-    classDay,
+    u_item: { u_id, u_name, time, times },
     c_id,
     isClassEnd,
     reduceRealP,
   } = props;
-  const app_t = moment(appo_time).format('MM-DD HH:mm');
-  const isAppo = classDay.substring(5, 10) == app_t.substring(0, 5);
   const [blacklist, setblacklist] = useState(false);
   const [cnt, setCnt] = useState(0);
   const { confirm } = Modal;
@@ -73,16 +70,9 @@ export default function Item(props: any) {
   }, []);
 
   return (
-    // 当课程未结束且当天预约，绿色；当课程结束且加入黑名单，红色;其他，普通
-    <ul
-      className={
-        isAppo && !isClassEnd
-          ? 'list_item green'
-          : blacklist && isClassEnd
-          ? 'list_item red'
-          : 'list_item'
-      }
-    >
+    // 当课程未结束且当天预约，绿色 -------- 去除
+    // 当课程结束且加入黑名单，红色; 其他，普通
+    <ul className={blacklist && isClassEnd ? 'list_item red' : 'list_item'}>
       <li>{u_name}</li>
       {/* 是否禁用：课程未结束或已加黑名单；选中就加进黑名单 */}
       {userInfo?.u_type == 0 ? (
