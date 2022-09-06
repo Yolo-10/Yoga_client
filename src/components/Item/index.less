@@ -1,0 +1,17 @@
+.list_item {
+  display: flex;
+  padding: 0 5px;
+  font-size: 1.1rem;
+  min-height: 36px;
+  align-items: center;
+
+  & + .list_item {
+    margin-top: 5px;
+  }
+
+  & > li {
+    text-align: center;
+    display: block;
+    flex: 1;
+  }
+}

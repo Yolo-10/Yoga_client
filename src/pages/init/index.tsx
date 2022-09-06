@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useModel } from 'umi';
-import { Calendar, Alert, message, Modal, Select } from 'antd';
+import { Calendar, message, Modal } from 'antd';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import { GetMonClassApi, GetDayClassApi } from '@/services/api';
-import { AddForm, Svg } from '@/components';
+import { AddForm, Svg, Header, CalSelect, DateCell } from '@/components';
+import { classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
 import './index.less';
 
@@ -18,29 +19,6 @@ const IndexPage = () => {
   const [isAdd, setIsAdd] = useState(false);
   const [monClassArr, setMonClassArr] = useState([]);
   const [todayClassArr, setTodayClassArr] = useState([]);
-
-  const DateCellRender = (value: Moment) => {
-    return (
-      <div>
-        {monClassArr.map((item: any) => {
-          return value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') ? (
-            <Link
-              className="item"
-              key={item.c_id}
-              to={`/dea?c_id=${item.c_id}&c_name=${item.c_name}`}
-            >
-              {item.c_name ? (
-                <img src={'static/' + item.c_name + '.svg'} alt="课程" />
-              ) : (
-                ''
-              )}
-              <div className="signupNum">{item.num ? item.num : 0}</div>
-            </Link>
-          ) : null;
-        })}
-      </div>
-    );
-  };
 
   //弹出确认退出账号框
   const showConfirm = () => {
@@ -126,24 +104,14 @@ const IndexPage = () => {
   }, [isAdd]);
 
   return (
-    <div className="page_inityuan">
-      {todayClassArr.map((item: any) => {
+    <div className="page_init">
+      {todayClassArr.map((item: classInfo) => {
         return (
-          <Alert
+          <Header
             key={item.c_id}
-            message={
-              <div>
-                {/* <span>{item.time.substring(5)}</span>
-                <span>{item.place}</span> */}
-                {item.time.substring(5) + '  ' + item.place}
-              </div>
-            }
-            icon={
-              <div className="item">
-                <img src={'static/' + item.c_name + '.svg'} alt="" />
-              </div>
-            }
-            showIcon
+            time={item.time.substring(5)}
+            place={item.place}
+            c_name={item.c_name}
           />
         );
       })}
@@ -152,78 +120,23 @@ const IndexPage = () => {
         <Calendar
           onChange={calChange}
           fullscreen={false}
-          headerRender={({ value, type, onChange, onTypeChange }) => {
-            const start = 0;
-            const end = 12;
-            const monthOptions = [];
-
-            const current = value.clone();
-            const localeData = value.localeData();
-            const months = [];
-            for (let i = 0; i < 12; i++) {
-              current.month(i);
-              months.push(localeData.monthsShort(current));
-            }
-
-            for (let i = start; i < end; i++) {
-              monthOptions.push(
-                <Select.Option key={i} value={i} className="month-item">
-                  {months[i]}
-                </Select.Option>,
-              );
-            }
-
-            const year = value.year();
-            const month = value.month();
-            const options = [];
-            for (let i = year - 10; i < year + 10; i += 1) {
-              options.push(
-                <Select.Option key={i} value={i} className="year-item">
-                  {i}
-                </Select.Option>,
-              );
-            }
-
-            return (
-              <div className="m-calHeader">
-                <div className="icon_box" onClick={userLogin}>
-                  <Svg id={'usr'} size={24} color={`#262626`} />
-                </div>
-                <div>
-                  <Select
-                    size="large"
-                    dropdownMatchSelectWidth={false}
-                    className="my-year-select"
-                    value={year}
-                    onChange={(newYear) => {
-                      const now = value.clone().year(newYear);
-                      onChange(now);
-                    }}
-                  >
-                    {options}
-                  </Select>
-                  <Select
-                    size="large"
-                    dropdownMatchSelectWidth={false}
-                    value={month}
-                    onChange={(newMonth) => {
-                      const now = value.clone().month(newMonth);
-                      onChange(now);
-                    }}
-                  >
-                    {monthOptions}
-                  </Select>
-                </div>
-                <AddForm
-                  canAdd={canAdd}
-                  choseDay={choseDay}
-                  setIsAdd={setIsAdd}
-                />
+          headerRender={({ value, onChange }) => (
+            <div className="m-calHeader">
+              <div className="icon_box" onClick={userLogin}>
+                <Svg id={'usr'} size={24} color={`#262626`} />
               </div>
-            );
-          }}
+              <CalSelect value={value} onChange={onChange} />
+              <AddForm
+                canAdd={canAdd}
+                choseDay={choseDay}
+                setIsAdd={setIsAdd}
+              />
+            </div>
+          )}
           onPanelChange={onPanelChange}
-          dateCellRender={DateCellRender}
+          dateCellRender={(value: Moment) => (
+            <DateCell monClassArr={monClassArr} value={value} />
+          )}
         />
       </div>
     </div>

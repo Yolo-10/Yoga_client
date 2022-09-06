@@ -10,7 +10,7 @@ import './index.less';
 export default function Login() {
   const history = useHistory();
   const { initialState, setInitialState } = useModel('@@initialState');
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: { u_id: number; password: string }) => {
     await LoginApi({
       params: {
         u_id: values.u_id,

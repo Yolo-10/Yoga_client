@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
-import { Alert } from 'antd';
 import moment from 'moment';
 import {
   DelSignupClassApi,
@@ -8,7 +7,7 @@ import {
   GetSignupUsersApi,
   SignupClassApi,
 } from '@/services/api';
-import { Item, Svg } from '@/components';
+import { List, Svg, Header, SignupBtn } from '@/components';
 import './index.less';
 
 export default function dea(props: any) {
@@ -22,7 +21,7 @@ export default function dea(props: any) {
   const [isClassEnd, setIsClassEnd] = useState(true);
   const [realP, setRealP] = useState(0);
   const [item, setItem] = useState({
-    c_id: '',
+    c_id: -1,
     c_name: '',
     time: '',
     place: '',
@@ -61,7 +60,7 @@ export default function dea(props: any) {
         if (res.status == 1) {
           // 如果返回的报名列表中存在本用户，标记为已经报名
           let thisUserSignup = res.data.find(
-            (obj: { u_id: any }, i: any) => obj.u_id == userInfo.u_id,
+            (obj: { u_id: number }) => obj.u_id == userInfo.u_id,
           );
           thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
           setUsers(res.data);
@@ -158,15 +157,12 @@ export default function dea(props: any) {
           </div>
           <span>课程详情</span>
         </header>
-        <Alert
-          message={<div>{item.time.substring(5) + '  ' + item.place}</div>}
-          icon={
-            <div className="item">
-              <img src={'/static/' + c_name + '.svg'} alt="课程类别" />
-            </div>
-          }
-          showIcon
-        ></Alert>
+
+        <Header
+          time={item.time.substring(5)}
+          place={item.place}
+          c_name={c_name}
+        />
         <div className="hd_des">
           <div>报名人数：{users?.length || 0}</div>
           <div>
@@ -182,25 +178,14 @@ export default function dea(props: any) {
               : 50}
           </div>
         </div>
-        <div>
-          <ul className="list_hd">
-            <li>学员</li>
-            {userInfo?.u_type == 0 ? <li>缺席</li> : null}
-            {userInfo?.u_type == 0 ? <li>缺席次数</li> : null}
-          </ul>
-          <div className="list_bd">
-            {users?.map((u_item, i) => (
-              <Item
-                u_item={u_item}
-                classDay={item?.time}
-                key={i}
-                c_id={item?.c_id}
-                isClassEnd={isClassEnd}
-                reduceRealP={reduceRealP}
-              />
-            ))}
-          </div>
-        </div>
+
+        <List
+          u_type={userInfo?.u_type == 0}
+          users={users}
+          c_id={item.c_id}
+          isClassEnd={isClassEnd}
+          reduceRealP={reduceRealP}
+        />
       </div>
 
       <div>
@@ -215,36 +200,18 @@ export default function dea(props: any) {
           <span className="m-bt-notice">课前1小时 后无法报名或退选课程</span>
         )}
 
-        {/*未登录、管理员、开课前1小时  -------->没有报名按钮 */}
         {!isLogin ||
         userInfo?.u_type == 0 ||
         !moment().isBefore(
           moment(item.time.substring(0, 16)).add(-1, 'h'),
         ) ? null : (
-          <>
-            {item.p_limit <= // 人数已经报满？
-              users.length && signupTime.length == 0 ? (
-              <button className="ft_btn disabled" disabled={true}>
-                报名人数已满
-              </button>
-            ) : //学员登录且课程未结束
-            signupTime.length == 0 ? (
-              <button className="ft_btn" onClick={handleSignup}>
-                报名
-              </button>
-            ) : //上课前一小时可以退选
-            moment().isBefore(
-                moment(item.time.substring(0, 16)).add(-1, 'h'),
-              ) ? (
-              <button className="ft_btn dan" onClick={handleSignup}>
-                退选
-              </button>
-            ) : (
-              <button className="ft_btn disabled" disabled={true}>
-                退选
-              </button>
-            )}
-          </>
+          <SignupBtn
+            p_limit={item.p_limit}
+            u_len={users.length}
+            isSignup={signupTime.length > 0}
+            classTime={item.time}
+            handleSignup={handleSignup}
+          />
         )}
       </div>
     </div>

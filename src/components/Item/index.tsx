@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import moment from 'moment';
 import { AddDefaultApi, DelDefApi } from '@/services/api';
 import { Svg } from '@/components';
+import { ItemProps } from '../PropInterfaces';
+import './index.less';
 
-export default function Item(props: any) {
+export default function Item(props: ItemProps) {
   const {
     initialState: { userInfo },
   } = useModel('@@initialState');

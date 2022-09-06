@@ -13,8 +13,10 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { AddClassApi } from '@/services/api';
-60;
-const AddForm = (props: any) => {
+import { addFormProps } from '../PropInterfaces';
+import './index.less';
+
+const AddForm = (props: addFormProps) => {
   const {
     initialState: { isLogin, userInfo },
   } = useModel('@@initialState');
