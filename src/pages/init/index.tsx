@@ -1,18 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useHistory, useModel } from 'umi';
-import {
-  Calendar,
-  Alert,
-  message,
-  Modal,
-  Col,
-  Radio,
-  Row,
-  Select,
-  Typography,
-} from 'antd';
+import { Calendar, Alert, message, Modal, Select } from 'antd';
 import type { Moment } from 'moment';
-import type { CalendarMode } from 'antd/es/calendar/generateCalendar';
 import moment from 'moment';
 import { GetMonClassApi, GetDayClassApi } from '@/services/api';
 import { AddForm, Svg } from '@/components';
@@ -87,7 +76,6 @@ const IndexPage = () => {
 
   //选择日期发生变化的回调
   const calChange = (value: Moment) => {
-    console.log(value);
     //设置添加按钮的开启
     if (value.isSame(moment(), 'day')) {
       setCanAdd(true);
