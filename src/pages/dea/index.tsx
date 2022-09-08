@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
+import { LeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import {
   DelSignupClassApi,
@@ -152,9 +153,7 @@ export default function dea(props: any) {
     <div className="page_dea">
       <div>
         <header>
-          <div onClick={returnBefore}>
-            <Svg id={'arr_e_left'} size={24} color={`#262626`} />
-          </div>
+          <LeftOutlined style={{ fontSize: '24px' }} onClick={returnBefore} />
           <span>课程详情</span>
         </header>
 

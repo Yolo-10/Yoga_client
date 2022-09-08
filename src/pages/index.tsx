@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useHistory, useModel } from 'umi';
+import { useHistory, useModel } from 'umi';
 import { Calendar, message, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import { GetMonClassApi, GetDayClassApi } from '@/services/api';
@@ -24,11 +25,7 @@ const IndexPage = () => {
   const showConfirm = () => {
     confirm({
       title: `确认退出账号吗? `,
-      icon: (
-        <span>
-          <Svg id={'za_notice'} size={24} color={`#faad14`} />
-        </span>
-      ),
+      icon: <ExclamationCircleOutlined />,
       onOk() {
         jwt.removeToken();
         setInitialState({
@@ -143,4 +140,5 @@ const IndexPage = () => {
   );
 };
 
+IndexPage.title = 'Home Page';
 export default IndexPage;

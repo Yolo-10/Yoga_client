@@ -6,21 +6,14 @@ export default defineConfig({
       name: 'apple-mobile-web-app-capable',
       content: 'yes',
     },
-    {
-      name: 'viewport',
-      content:
-        'width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no',
-    },
   ],
+  dynamicImport: {
+    loading: '@/components/Loading',
+  },
   nodeModulesTransform: {
     type: 'none',
   },
   exportStatic: {},
-  routes: [
-    { path: '/', component: '@/pages/init' },
-    { path: '/dea', component: '@/pages/dea' },
-    { path: '/login', component: '@/pages/login' },
-  ],
   fastRefresh: {},
   locale: {
     default: 'zh-CN', // 工程默认语言

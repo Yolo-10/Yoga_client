@@ -1,9 +1,9 @@
 import { Switch, Modal } from 'antd';
 import { useModel } from 'umi';
 import { useEffect, useState } from 'react';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { AddDefaultApi, DelDefApi } from '@/services/api';
-import { Svg } from '@/components';
 import { ItemProps } from '../PropInterfaces';
 import './index.less';
 
@@ -24,11 +24,7 @@ export default function Item(props: ItemProps) {
   const showConfirm = () => {
     confirm({
       title: `确认 ${u_name} 缺席?`,
-      icon: (
-        <span>
-          <Svg id={'za_notice'} size={24} color={`#faad14`} />
-        </span>
-      ),
+      icon: <ExclamationCircleOutlined />,
       onOk() {
         AddDefaultApi({
           u_id,
