@@ -122,8 +122,8 @@ const AddForm = (props: addFormProps) => {
               <Form.Item name="c_name" label="" rules={[{ required: true }]}>
                 <Radio.Group buttonStyle="solid">
                   <Radio.Button value="yoga">瑜伽</Radio.Button>
-                  <Radio.Button value="go">围棋</Radio.Button>
-                  <Radio.Button value="badminton">羽毛球</Radio.Button>
+                  {/* <Radio.Button value="go">围棋</Radio.Button>
+                  <Radio.Button value="badminton">羽毛球</Radio.Button> */}
                 </Radio.Group>
               </Form.Item>
             </Col>
