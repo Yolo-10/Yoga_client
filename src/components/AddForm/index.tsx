@@ -97,6 +97,7 @@ const AddForm = (props: addFormProps) => {
         <Button
           className={canAdd ? 'add_icon' : 'add_icon cannot_add'}
           onClick={showDrawer}
+          disabled={!canAdd}
         >
           添加
         </Button>

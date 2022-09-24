@@ -39,7 +39,7 @@ export interface signupBtnProps {
   p_limit: number;
   u_len: number;
   isSignup: boolean;
-  classTime: string;
+  isBeforeOneHour: boolean;
   handleSignup: MouseEventHandler;
 }
 

@@ -18,7 +18,7 @@ export default function dea(props: any) {
   } = useModel('@@initialState');
   const [users, setUsers] = useState([]);
   const [signupTime, setSignupTime] = useState('');
-  //初始假设课程未结束
+  //初始假设课程结束
   const [isClassEnd, setIsClassEnd] = useState(true);
   const [realP, setRealP] = useState(0);
   const [item, setItem] = useState({
@@ -188,27 +188,27 @@ export default function dea(props: any) {
       </div>
 
       <div>
-        {/* 管理员、课程未开始、未达开课人数 */}
-        {!isClassEnd && realP < 4 ? (
+        {/*未达开课人数 */}
+        {realP < 4 ? (
           <span className="m-bt-notice">离最少开课人数差 {4 - realP} 位</span>
         ) : (
           ''
         )}
 
-        {userInfo?.u_type == 0 ? null : (
+        {/* 管理员、课程未结束 */}
+        {isClassEnd || userInfo?.u_type == 0 ? null : (
           <span className="m-bt-notice">课前1小时 后无法报名或退选课程</span>
         )}
 
-        {!isLogin ||
-        userInfo?.u_type == 0 ||
-        !moment().isBefore(
-          moment(item.time.substring(0, 16)).add(-1, 'h'),
-        ) ? null : (
+        {/* 登录且是学员且课程未结束 */}
+        {!isLogin || userInfo?.u_type == 0 || isClassEnd ? null : (
           <SignupBtn
             p_limit={item.p_limit}
             u_len={users.length}
             isSignup={signupTime.length > 0}
-            classTime={item.time}
+            isBeforeOneHour={moment().isBefore(
+              moment(item.time.substring(0, 16)).add(-1, 'h'),
+            )}
             handleSignup={handleSignup}
           />
         )}
