@@ -3,6 +3,7 @@ import jwt from '@/util/token';
 
 const BASE_URL = {
   baseURL: 'http://47.97.255.67/',
+  // baseURL: 'api',
 };
 
 const instance = axios.create(BASE_URL);

@@ -63,3 +63,13 @@ export interface ListProps {
   isClassEnd: boolean;
   reduceRealP: Function;
 }
+
+export interface FormComProps {
+  onFinish: Function;
+  confirmNeed: boolean;
+  option: string;
+  link: {
+    src: string;
+    str: string;
+  };
+}

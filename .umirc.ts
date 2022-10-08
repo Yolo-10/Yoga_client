@@ -7,13 +7,13 @@ export default defineConfig({
       content: 'yes',
     },
   ],
+  exportStatic: {},
   dynamicImport: {
     loading: '@/components/Loading',
   },
   nodeModulesTransform: {
     type: 'none',
   },
-  exportStatic: {},
   fastRefresh: {},
   locale: {
     default: 'zh-CN', // 工程默认语言
