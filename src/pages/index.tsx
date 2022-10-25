@@ -29,7 +29,6 @@ const IndexPage = () => {
       onOk() {
         jwt.removeToken();
         setInitialState({
-          isLogin: false,
           userInfo: null,
         });
         window.location.href = '/';
@@ -92,13 +91,16 @@ const IndexPage = () => {
   //日历课程动态监听
   useEffect(() => {
     getMonClass(choseMonth);
-    // getSignupNumber(choseMonth);
   }, [choseMonth, isAdd]);
 
   //头部信息
   useEffect(() => {
     getTodayClass(moment().format('YYYY-MM-DD'));
   }, [isAdd]);
+
+  // useEffect(()=>{
+  //   console.log('环境变量：', process.env, process.env.UMI_ENV);
+  // },[]);
 
   return (
     <div className="page_init">

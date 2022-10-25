@@ -26,7 +26,6 @@ export default function Login() {
 
           //修改全局的initState,已经登录
           setInitialState({
-            isLogin: true,
             userInfo: decode(res.data),
           });
 

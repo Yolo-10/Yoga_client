@@ -4,7 +4,6 @@ import decode from 'jwt-decode';
 export async function getInitialState() {
   //默认值
   let userState = {
-    isLogin: false,
     userInfo: null,
   };
 
@@ -13,7 +12,6 @@ export async function getInitialState() {
 
   if (info) {
     userState = {
-      isLogin: true,
       userInfo: decode(info),
     };
   }

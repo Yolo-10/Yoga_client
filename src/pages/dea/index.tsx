@@ -14,8 +14,9 @@ import './index.less';
 export default function dea(props: any) {
   const { c_id, c_name } = props.location.query;
   const {
-    initialState: { isLogin, userInfo },
+    initialState: { userInfo },
   } = useModel('@@initialState');
+
   const [users, setUsers] = useState([]);
   const [signupTime, setSignupTime] = useState('');
   //初始假设课程结束
@@ -120,16 +121,11 @@ export default function dea(props: any) {
     setRealP(op == 'add' ? realP + val : realP - val);
   };
 
-  //检测是否登录
   useEffect(() => {
-    if (isLogin) {
-      //查询本课程
-      getClassById();
-      //报名用户是否报名以及报名列表
-      getSignupUsersInit();
-    } else {
-      history.replace('/login');
-    }
+    //查询本课程
+    getClassById();
+    //报名用户是否报名以及报名列表
+    getSignupUsersInit();
   }, []);
 
   //判断课程是否结束---因为请求课程信息太慢，故此处是监听item的变化，而非页面初始化时执行
@@ -201,7 +197,7 @@ export default function dea(props: any) {
         )}
 
         {/* 登录且是学员且课程未结束 */}
-        {!isLogin || userInfo?.u_type == 0 || isClassEnd ? null : (
+        {userInfo?.u_type == 0 || isClassEnd ? null : (
           <SignupBtn
             p_limit={item.p_limit}
             u_len={users.length}

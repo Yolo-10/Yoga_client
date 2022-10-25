@@ -18,7 +18,7 @@ import './index.less';
 
 const AddForm = (props: addFormProps) => {
   const {
-    initialState: { isLogin, userInfo },
+    initialState: { userInfo },
   } = useModel('@@initialState');
   const { canAdd, choseDay, setIsAdd } = props;
   const [visible, setVisible] = useState(false);
@@ -89,8 +89,8 @@ const AddForm = (props: addFormProps) => {
   );
 
   return (
-    //不登录或是学员时，无权添加
-    !isLogin || userInfo?.u_type == 1 ? (
+    //不是管理员,无权添加
+    userInfo?.u_type != 0 ? (
       <></>
     ) : (
       <div>
@@ -105,7 +105,7 @@ const AddForm = (props: addFormProps) => {
           title="添加课程"
           width={'417px'}
           onClose={onClose}
-          visible={visible}
+          open={visible}
         >
           <Form
             layout="vertical"
@@ -123,8 +123,8 @@ const AddForm = (props: addFormProps) => {
               <Form.Item name="c_name" label="" rules={[{ required: true }]}>
                 <Radio.Group buttonStyle="solid">
                   <Radio.Button value="yoga">瑜伽</Radio.Button>
-                  {/* <Radio.Button value="go">围棋</Radio.Button>
-                  <Radio.Button value="badminton">羽毛球</Radio.Button> */}
+                  <Radio.Button value="go">围棋</Radio.Button>
+                  <Radio.Button value="badminton">羽毛球</Radio.Button>
                 </Radio.Group>
               </Form.Item>
             </Col>

@@ -9,7 +9,6 @@ export const getToken = () => {
 
 export const saveToken = (token: string) => {
   window.localStorage.setItem(TOKEN_KEY, token);
-  // window.localStorage.setItem(USER_KEY, JSON.stringify(decode(token)));
 };
 
 export const removeToken = () => {
@@ -20,9 +19,5 @@ export const removeToken = () => {
 export const decodeToken = () => {
   return decode(window.localStorage.getItem(TOKEN_KEY) || '');
 };
-
-// export const getUser = () => {
-//   return JSON.parse(window.localStorage.getItem(USER_KEY) || "");
-// };
 
 export default { getToken, saveToken, removeToken, decodeToken };
