@@ -3,13 +3,14 @@ import { useHistory, useModel } from 'umi';
 import { message } from 'antd';
 import decode from 'jwt-decode';
 import { LoginApi } from '@/services/api';
-import jwt from '@/util/token';
+import jwt, { saveToken } from '@/util/token';
 import './index.less';
 import FormCom from '@/components/Form';
 
 export default function Login() {
   const history = useHistory();
   const { initialState, setInitialState } = useModel('@@initialState');
+
   const onFinish = async (values: { u_id: number; password: string }) => {
     await LoginApi({
       params: {

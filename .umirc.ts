@@ -8,6 +8,7 @@ export default defineConfig({
     },
   ],
   exportStatic: {},
+  // 按需加载：将umi.js和umi.css拆分
   dynamicImport: {
     loading: '@/components/Loading',
   },
@@ -23,9 +24,10 @@ export default defineConfig({
   },
   // proxy: {
   //   '/api': {
-  //     target: 'http://localhost:8000',
-  //     pathRewrite: { '^/api': '' },
-  //     changeOrigin: true,
-  //   },
+  // target: 'http://localhost:8000',
+  // target: 'http://www.summeryoga.top',
+  //   pathRewrite: { '^/api': '' },
+  //   changeOrigin: true,
+  // },
   // },
 });
