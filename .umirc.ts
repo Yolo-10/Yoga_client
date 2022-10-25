@@ -32,6 +32,7 @@ export default defineConfig({
     // wrappers 路由守卫
     { path: '/dea', component: '@/pages/dea', wrappers: ['@/components/Auth'] },
     { path: '/login', component: '@/pages/login' },
+    { path: '/register', component: '@/pages/register' },
   ],
   // 路由懒加载：按需加载：将umi.js和umi.css拆分
   dynamicImport: {

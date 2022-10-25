@@ -3,7 +3,7 @@ var API_SERVER = 'http://localhost';
 
 if (mode === 'development') {
   API_SERVER = 'http://localhost:8000/api';
-  // API_SERVER='http://110.42.230.161',
+  // API_SERVER='http://110.42.230.161'
 }
 
 if (mode === 'production') {
