@@ -24,7 +24,7 @@ export default function FormCom(props: FormComProps) {
         >
           <Form.Item
             name="u_id"
-            rules={[{ required: true, message: '请输入姓名!' }]}
+            rules={[{ required: true, message: '请输入工号!' }]}
           >
             <Input
               prefix={
@@ -32,9 +32,25 @@ export default function FormCom(props: FormComProps) {
                   <Svg id={'usr'} size={24} color={`#bfbfbf`} />
                 </div>
               }
-              placeholder="姓名"
+              placeholder="工号"
             />
           </Form.Item>
+
+          {confirmNeed && (
+            <Form.Item
+              name="u_name"
+              rules={[{ required: true, message: '请输入姓名!' }]}
+            >
+              <Input
+                prefix={
+                  <div className="icon_box">
+                    <Svg id={'usr'} size={24} color={`#bfbfbf`} />
+                  </div>
+                }
+                placeholder="姓名"
+              />
+            </Form.Item>
+          )}
 
           <Form.Item
             name="password"

@@ -5,11 +5,16 @@ import { RegApi } from '@/services/api';
 import './index.less';
 import FormCom from '@/components/Form';
 
-export default function Login() {
+export default function Register() {
   const history = useHistory();
-  const onFinish = async (values: { u_id: number; password: string }) => {
+  const onFinish = async (values: {
+    u_id: number;
+    password: string;
+    u_name: number;
+  }) => {
     await RegApi({
       u_id: values.u_id,
+      u_name: values.u_name,
       password: values.password,
     })
       .then((res) => {

@@ -16,7 +16,7 @@ export default defineConfig({
       content: 'yes',
     },
   ],
-  exportStatic: {},
+  // exportStatic: {},
   define: {
     // 重点就是这个属性了，设置全局变量
     // （默认作为dev环境）/
@@ -27,9 +27,9 @@ export default defineConfig({
       UMI_ENV: 'dev',
     },
   },
+  history: { type: 'hash' },
   routes: [
     { path: '/', component: '@/pages/' },
-    // wrappers 路由守卫
     { path: '/dea', component: '@/pages/dea', wrappers: ['@/components/Auth'] },
     { path: '/login', component: '@/pages/login' },
     { path: '/register', component: '@/pages/register' },
