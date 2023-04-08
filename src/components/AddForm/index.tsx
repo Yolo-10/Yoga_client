@@ -12,7 +12,7 @@ import {
   InputNumber,
 } from 'antd';
 import moment from 'moment';
-import { AddClassApi } from '@/services/api';
+import { API_ADD_CLASS, post } from '@/constant/api';
 import { addFormProps } from '../PropInterfaces';
 import './index.less';
 
@@ -49,18 +49,16 @@ const AddForm = (props: addFormProps) => {
     )
       ? message.error('上课时间早于当前')
       : //发送请求
-        await AddClassApi({ c_name, time, place, p_limit })
-          .then((res) => {
+        await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(
+          (res) => {
             if (res.status === 1) {
               setVisible(false);
               message.success('添加成功');
               form.resetFields();
               setIsAdd(true);
             }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+          },
+        );
   };
 
   // 加减事件
@@ -123,8 +121,8 @@ const AddForm = (props: addFormProps) => {
               <Form.Item name="c_name" label="" rules={[{ required: true }]}>
                 <Radio.Group buttonStyle="solid">
                   <Radio.Button value="yoga">瑜伽</Radio.Button>
-                  <Radio.Button value="go">围棋</Radio.Button>
-                  <Radio.Button value="badminton">羽毛球</Radio.Button>
+                  {/* <Radio.Button value="go">围棋</Radio.Button>
+                  <Radio.Button value="badminton">羽毛球</Radio.Button> */}
                 </Radio.Group>
               </Form.Item>
             </Col>

@@ -1,13 +1,11 @@
 import axios from 'axios';
 import jwt from '@/util/token';
-import { API_SERVER } from './urls';
-import { message } from 'antd';
+import { BASE_URL } from '@/constant/config';
 
-const BASE_URL = {
-  baseURL: `${API_SERVER}`,
-};
-
-const instance = axios.create(BASE_URL);
+const instance = axios.create({
+  timeout: 20000,
+  baseURL: BASE_URL[process.env.NODE_ENV],
+});
 
 instance.interceptors.request.use(
   (config) => {
@@ -23,7 +21,6 @@ instance.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-
 instance.interceptors.response.use(
   (response) => {
     return response.data;

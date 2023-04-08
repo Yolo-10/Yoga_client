@@ -1,27 +1,14 @@
 import { defineConfig } from 'umi';
 const CompressionPlugin = require('compression-webpack-plugin');
-const prodGzipList = ['js', 'css'];
 
 export default defineConfig({
-  // proxy: {
-  //   '/api': {
-  //     target: 'http://localhost:8000',
-  //     pathRewrite: { '^/api': '' },
-  //     changeOrigin: true,
-  //   },
-  // },
   metas: [
     {
       name: 'apple-mobile-web-app-capable',
       content: 'yes',
     },
   ],
-  // exportStatic: {},
   define: {
-    // 重点就是这个属性了，设置全局变量
-    // （默认作为dev环境）/
-    // 在项目中，可以通过process.env.NODE_ENV 或者
-    // process.env.UMI_ENV 或者process.env.date得到对应环境的值
     'process.env': {
       NODE_ENV: 'dev',
       UMI_ENV: 'dev',
@@ -34,7 +21,6 @@ export default defineConfig({
     { path: '/login', component: '@/pages/login' },
     { path: '/register', component: '@/pages/register' },
   ],
-  // 路由懒加载：按需加载：将umi.js和umi.css拆分
   dynamicImport: {
     loading: '@/components/Loading',
   },
@@ -43,10 +29,8 @@ export default defineConfig({
   },
   fastRefresh: {},
   locale: {
-    // 工程默认语言
     default: 'zh-CN',
     antd: true,
-    // 默认为true。为true时，会使用`navigator.language`覆盖默认。为false时，则使用默认语言
     baseNavigator: false,
   },
   chunks: ['vendors', 'umi'],
@@ -118,7 +102,6 @@ export default defineConfig({
       },
     });
     if (process.env.NODE_ENV === 'prod') {
-      //gzip压缩
       config.plugin('compression-webpack-plugin').use(CompressionPlugin, [
         {
           test: /\.js$|\.html$|\.css$/, //匹配文件名
@@ -127,7 +110,6 @@ export default defineConfig({
         },
       ]);
     }
-    //过滤掉moment的那些不使用的国际化文件
     config
       .plugin('replace')
       .use(require('webpack').ContextReplacementPlugin)

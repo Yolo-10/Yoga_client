@@ -4,7 +4,7 @@ import { Calendar, message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import type { Moment } from 'moment';
 import moment from 'moment';
-import { GetMonClassApi, GetDayClassApi } from '@/services/api';
+import { API_DAY_CLASS, API_MON_CLASS, get } from '@/constant/api';
 import { AddForm, Svg, Header, CalSelect, DateCell } from '@/components';
 import { classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
@@ -12,7 +12,7 @@ import './index.less';
 
 const IndexPage = () => {
   const { confirm } = Modal;
-  const { initialState, setInitialState } = useModel('@@initialState');
+  const { setInitialState } = useModel('@@initialState');
   const history = useHistory();
   const [canAdd, setCanAdd] = useState(true);
   const [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
@@ -68,24 +68,20 @@ const IndexPage = () => {
 
   //获取某月的课程信息
   const getMonClass = async (month: string) => {
-    await GetMonClassApi({ params: { Mon: month } })
-      .then((res) => {
-        if (res.status === 1) {
-          setMonClassArr(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
+    await get(API_MON_CLASS, { Mon: month }).then((res) => {
+      if (res.status === 1) {
+        setMonClassArr(res.data);
+      }
+    });
   };
 
   //获取某天的课程信息---当天
   const getTodayClass = async (day: string) => {
-    await GetDayClassApi({ params: { Today: day } })
-      .then((res) => {
-        if (res.status === 1) {
-          setTodayClassArr(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
+    await get(API_DAY_CLASS, { Today: day }).then((res) => {
+      if (res.status === 1) {
+        setTodayClassArr(res.data);
+      }
+    });
   };
 
   //日历课程动态监听

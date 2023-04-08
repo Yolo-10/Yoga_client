@@ -3,7 +3,7 @@ import { useModel } from 'umi';
 import { useEffect, useState } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { AddDefaultApi, DelDefApi } from '@/services/api';
+import { API_ADD_DEFAULT, API_DEL_DEF, post } from '@/constant/api';
 import { ItemProps } from '../PropInterfaces';
 import './index.less';
 
@@ -26,21 +26,19 @@ export default function Item(props: ItemProps) {
       title: `确认 ${u_name} 缺席?`,
       icon: <ExclamationCircleOutlined />,
       onOk() {
-        AddDefaultApi({
+        post(API_ADD_DEFAULT, {
           u_id,
           u_name,
           c_id,
           time: moment().format('YYYY:MM:DD HH:mm:ss'),
-        })
-          .then((res) => {
-            if (res.status == 1) {
-              setblacklist(!blacklist);
-              //页面缺席次数展示 增加+1
-              setCnt(cnt + 1);
-              reduceRealP(1, 'reduce');
-            }
-          })
-          .catch((err) => console.log(err));
+        }).then((res) => {
+          if (res.status == 1) {
+            setblacklist(!blacklist);
+            //页面缺席次数展示 增加+1
+            setCnt(cnt + 1);
+            reduceRealP(1, 'reduce');
+          }
+        });
       },
       onCancel() {
         // console.log('Cancel');
@@ -50,15 +48,13 @@ export default function Item(props: ItemProps) {
 
   //不缺席了
   const delDef = () => {
-    DelDefApi({ c_id, u_id })
-      .then((res) => {
-        if (res.data.affectedRows > 0) {
-          setblacklist(!blacklist);
-          setCnt(cnt - 1);
-          reduceRealP(1, 'add');
-        }
-      })
-      .catch((err) => console.log(err));
+    post(API_DEL_DEF, { c_id, u_id }).then((res) => {
+      if (res.data.affectedRows > 0) {
+        setblacklist(!blacklist);
+        setCnt(cnt - 1);
+        reduceRealP(1, 'add');
+      }
+    });
   };
 
   useEffect(() => {

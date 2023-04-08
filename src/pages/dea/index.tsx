@@ -3,11 +3,13 @@ import { history, useModel } from 'umi';
 import { LeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import {
-  DelSignupClassApi,
-  GetClassByIdApi,
-  GetSignupUsersApi,
-  SignupClassApi,
-} from '@/services/api';
+  API_DEL_SIGN_UP,
+  API_CLASS_BY_ID,
+  API_SIGN_UP_USERS,
+  API_SIGN_UP,
+  get,
+  post,
+} from '@/constant/api';
 import { List, Svg, Header, SignupBtn } from '@/components';
 import './index.less';
 
@@ -41,80 +43,58 @@ export default function dea(props: any) {
   };
   //请求课程头部信息
   const getClassById = async () => {
-    GetClassByIdApi({
-      params: {
-        c_id: c_id,
-      },
-    })
-      .then((res) => {
-        res.status == 1 ? setItem(res.data[0]) : null;
-      })
-      .catch((err) => console.log(err));
+    get(API_CLASS_BY_ID, { c_id: c_id }).then((res) => {
+      res.status == 1 ? setItem(res.data[0]) : null;
+    });
   };
   // 初始页面——请求报名列表（判定是否已报名该课程）
   const getSignupUsersInit = () => {
-    GetSignupUsersApi({
-      params: {
-        c_id: c_id,
-      },
-    })
-      .then((res) => {
-        if (res.status == 1) {
-          // 如果返回的报名列表中存在本用户，标记为已经报名
-          let thisUserSignup = res.data.find(
-            (obj: { u_id: number }) => obj.u_id == userInfo.u_id,
-          );
-          thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
-          setUsers(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
+    get(API_SIGN_UP_USERS, { c_id }).then((res) => {
+      if (res.status == 1) {
+        // 如果返回的报名列表中存在本用户，标记为已经报名
+        let thisUserSignup = res.data.find(
+          (obj: { u_id: number }) => obj.u_id == userInfo.u_id,
+        );
+        thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
+        setUsers(res.data);
+      }
+    });
   };
   // 请求报名列表（直接获取所有报名列表，渲染）
   const getSignupUsers = () => {
-    GetSignupUsersApi({
-      params: {
-        c_id: c_id,
-      },
-    })
-      .then((res) => {
-        if (res.status == 1) {
-          setUsers(res.data);
-          // console.log(res.data);
-        }
-      })
-      .catch((err) => console.log(err));
+    get(API_SIGN_UP_USERS, { c_id: c_id }).then((res) => {
+      if (res.status == 1) {
+        setUsers(res.data);
+        // console.log(res.data);
+      }
+    });
   };
   //报名该课程
   const signupClass = async () => {
     let { c_id } = item,
       { u_id, u_name } = userInfo,
       appo_time = moment().format('YYYY-MM-DD HH:mm:ss');
-    SignupClassApi({ c_id, c_name, u_id, u_name, appo_time })
-      .then((res) => {
-        if (res.data.affectedRows > 0) {
-          //报名了
-          setSignupTime(appo_time);
-          //重新获取报名列表
-          getSignupUsers();
-        }
-      })
-      .catch((err) => console.log(err));
+    post(API_SIGN_UP, { c_id, c_name, u_id, u_name, appo_time }).then((res) => {
+      if (res.data.affectedRows > 0) {
+        //报名了
+        setSignupTime(appo_time);
+        //重新获取报名列表
+        getSignupUsers();
+      }
+    });
   };
   //退选该课程
   const delSignupClass = async () => {
     let { c_id } = item,
       { u_id } = userInfo;
-    DelSignupClassApi({ c_id, u_id })
-      .then((res) => {
-        if (res.data.affectedRows > 0) {
-          //不报名了
-          setSignupTime('');
-          //重新获取报名列表
-          getSignupUsers();
-        }
-      })
-      .catch((err) => console.log(err));
+    post(API_DEL_SIGN_UP, { c_id, u_id }).then((res) => {
+      if (res.data.affectedRows > 0) {
+        //不报名了
+        setSignupTime('');
+        //重新获取报名列表
+        getSignupUsers();
+      }
+    });
   };
   //缺席状态改变时，实际人数的变化-->价格变动
   const reduceRealP = (val: number, op: string) => {
