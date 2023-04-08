@@ -1,5 +1,5 @@
 import { Switch, Modal } from 'antd';
-import { useModel } from 'umi';
+import { observer, inject } from 'umi';
 import { useEffect, useState } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -7,10 +7,8 @@ import { API_ADD_DEFAULT, API_DEL_DEF, post } from '@/constant/api';
 import { ItemProps } from '../PropInterfaces';
 import './index.less';
 
-export default function Item(props: ItemProps) {
-  const {
-    initialState: { userInfo },
-  } = useModel('@@initialState');
+function Item(props: ItemProps) {
+  const { curUser } = props.index;
   const {
     u_item: { u_id, u_name, time, times },
     c_id,
@@ -69,7 +67,7 @@ export default function Item(props: ItemProps) {
     <ul className={blacklist && isClassEnd ? 'list_item red' : 'list_item'}>
       <li>{u_name}</li>
       {/* 是否禁用：课程未结束或已加黑名单；选中就加进黑名单 */}
-      {userInfo?.u_type == 0 ? (
+      {curUser?.u_type == 0 ? (
         <li>
           <Switch
             disabled={!isClassEnd}
@@ -78,7 +76,9 @@ export default function Item(props: ItemProps) {
           />
         </li>
       ) : null}
-      {userInfo?.u_type == 0 ? <li>{cnt}</li> : null}
+      {curUser?.u_type == 0 ? <li>{cnt}</li> : null}
     </ul>
   );
 }
+
+export default inject('index')(observer(Item));

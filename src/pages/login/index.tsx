@@ -1,15 +1,13 @@
 import React from 'react';
-import { useHistory, useModel } from 'umi';
+import { useHistory, observer, inject } from 'umi';
 import { message } from 'antd';
-import decode from 'jwt-decode';
 import { get, API_LOGIN } from '@/constant/api';
-import jwt, { saveToken } from '@/util/token';
 import './index.less';
 import FormCom from '@/components/Form';
 
-export default function Login() {
+function Login({ index }) {
+  const store = index;
   const history = useHistory();
-  const { initialState, setInitialState } = useModel('@@initialState');
 
   const onFinish = async (values: { u_id: number; password: string }) => {
     await get(API_LOGIN, {
@@ -17,14 +15,8 @@ export default function Login() {
       password: values.password,
     }).then((res) => {
       if (res.status == 0) {
-        //保存token,并提示用户
-        jwt.saveToken(res.data);
+        store.saveCurUser(res.data);
         message.success('登录成功');
-
-        //修改全局的initState,已经登录
-        setInitialState({
-          userInfo: decode(res.data),
-        });
 
         //页面跳转
         setTimeout(() => history.push('/'), 1000);
@@ -43,3 +35,5 @@ export default function Login() {
     />
   );
 }
+
+export default inject('index')(observer(Login));

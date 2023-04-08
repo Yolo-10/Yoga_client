@@ -16,7 +16,7 @@ export default defineConfig({
   },
   history: { type: 'hash' },
   routes: [
-    { path: '/', component: '@/pages/' },
+    { path: '/', component: '@/pages/Index' },
     { path: '/dea', component: '@/pages/dea', wrappers: ['@/components/Auth'] },
     { path: '/login', component: '@/pages/login' },
     { path: '/register', component: '@/pages/register' },
