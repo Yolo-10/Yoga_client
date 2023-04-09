@@ -1,14 +1,75 @@
 import { useEffect, useState } from 'react';
 import { Link, useModel } from 'umi';
-import { Calendar, message, Modal } from 'antd';
+import { Alert, Calendar, message, Modal, Select } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import { API_DAY_CLASS, API_MON_CLASS, get } from '@/constant/api';
-import { AddForm, Svg, Header, CalSelect } from '@/components';
-import { classInfo } from '@/components/PropInterfaces';
+import { AddForm, Svg } from '@/components';
+import { calSelectProps, classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
 import './index.less';
+
+const CalSelect = ({ value, onChange }: calSelectProps) => {
+  const start = 0;
+  const end = 12;
+  const monthOptions = [];
+
+  const current = value.clone();
+  const localeData = value.localeData();
+  const months = [];
+  for (let i = 0; i < 12; i++) {
+    current.month(i);
+    months.push(localeData.monthsShort(current));
+  }
+
+  for (let i = start; i < end; i++) {
+    monthOptions.push(
+      <Select.Option key={i} value={i} className="month-item">
+        {months[i]}
+      </Select.Option>,
+    );
+  }
+
+  const year = value.year();
+  const month = value.month();
+  const options = [];
+  for (let i = year - 10; i < year + 10; i += 1) {
+    options.push(
+      <Select.Option key={i} value={i} className="year-item">
+        {i}
+      </Select.Option>,
+    );
+  }
+
+  return (
+    <div>
+      <Select
+        size="large"
+        dropdownMatchSelectWidth={false}
+        className="my-year-select"
+        value={year}
+        onChange={(newYear) => {
+          const now = value.clone().year(newYear);
+          onChange(now);
+        }}
+      >
+        {options}
+      </Select>
+      <Select
+        size="large"
+        dropdownMatchSelectWidth={false}
+        value={month}
+        onChange={(newMonth) => {
+          const now = value.clone().month(newMonth);
+          onChange(now);
+        }}
+      >
+        {monthOptions}
+      </Select>
+    </div>
+  );
+};
 
 export default function IndexPage() {
   const { confirm } = Modal;
@@ -87,11 +148,15 @@ export default function IndexPage() {
     <div className="page_init">
       {todayClassArr.map((item: classInfo) => {
         return (
-          <Header
+          <Alert
             key={item.c_id}
-            time={item.time.substring(5)}
-            place={item.place}
-            c_name={item.c_name}
+            message={<div>{item.time.substring(5) + '  ' + item.place}</div>}
+            icon={
+              <div className="item">
+                <img src={'static/' + item.c_name + '.svg'} alt="" />
+              </div>
+            }
+            showIcon
           />
         );
       })}

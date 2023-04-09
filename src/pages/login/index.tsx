@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { get, API_LOGIN } from '@/constant/api';
 import jwt from '@/util/token';
 import './index.less';
-import FormCom from '@/components/Form';
+import { FormCom } from '@/components';
 
 export default function Login() {
   const { initialState, setInitialState } = useModel('@@initialState');

@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { API_REGISTER, post } from '@/constant/api';
-import FormCom from '@/components/Form';
+import { FormCom } from '@/components';
 import './index.less';
 
 export default function Register() {

@@ -10,8 +10,9 @@ import {
   get,
   post,
 } from '@/constant/api';
-import { List, Header, SignupBtn } from '@/components';
+import { Item } from '@/components';
 import './index.less';
+import { Alert } from 'antd';
 
 export default function dea(props: any) {
   const history = useHistory();
@@ -96,6 +97,10 @@ export default function dea(props: any) {
     setRealP(op == 'add' ? realP + val : realP - val);
   };
 
+  const isBeforeOneHour = moment().isBefore(
+    moment(item.time.substring(0, 16)).add(-1, 'h'),
+  );
+
   useEffect(() => {
     //查询本课程
     getClassById();
@@ -128,10 +133,14 @@ export default function dea(props: any) {
           <span>课程详情</span>
         </header>
 
-        <Header
-          time={item.time.substring(5)}
-          place={item.place}
-          c_name={c_name}
+        <Alert
+          message={<div>{item.time.substring(5) + '  ' + item.place}</div>}
+          icon={
+            <div className="item">
+              <img src={'/static/' + c_name + '.svg'} alt="课程类别" />
+            </div>
+          }
+          showIcon
         />
         <div className="hd_des">
           <div>报名人数：{users?.length || 0}</div>
@@ -149,39 +158,64 @@ export default function dea(props: any) {
           </div>
         </div>
 
-        <List
-          u_type={userInfo?.u_type == 0}
-          users={users}
-          c_id={item.c_id}
-          isClassEnd={isClassEnd}
-          reduceRealP={reduceRealP}
-        />
+        <div>
+          <ul className="list_hd">
+            <li>学员</li>
+            {!userInfo?.u_type && <li>缺席</li>}
+            {!userInfo?.u_type && <li>缺席次数</li>}
+          </ul>
+          <div className="list_bd">
+            {users?.map((u_item, i) => (
+              <Item
+                u_item={u_item}
+                key={i}
+                c_id={c_id}
+                isClassEnd={isClassEnd}
+                reduceRealP={reduceRealP}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
       <div>
         {/*未达开课人数 */}
-        {realP < 4 ? (
+        {realP < 4 && (
           <span className="m-bt-notice">离最少开课人数差 {4 - realP} 位</span>
-        ) : (
-          ''
         )}
 
         {/* 管理员、课程未结束 */}
-        {isClassEnd || userInfo?.u_type == 0 ? null : (
+        {!(isClassEnd || userInfo?.u_type == 0) && (
           <span className="m-bt-notice">课前1小时 后无法报名或退选课程</span>
         )}
 
         {/* 登录且是学员且课程未结束 */}
-        {userInfo?.u_type == 0 || isClassEnd ? null : (
-          <SignupBtn
-            p_limit={item.p_limit}
-            u_len={users.length}
-            isSignup={signupTime.length > 0}
-            isBeforeOneHour={moment().isBefore(
-              moment(item.time.substring(0, 16)).add(-1, 'h'),
+        {!(userInfo?.u_type == 0 || isClassEnd) && (
+          <>
+            {item.p_limit <= users.length && signupTime.length == 0 ? (
+              <button className="ft_btn disabled" disabled={true}>
+                报名人数已满
+              </button>
+            ) : signupTime.length == 0 ? (
+              <button
+                className={isBeforeOneHour ? 'ft_btn' : 'ft_btn disabled'}
+                onClick={handleSignup}
+                //上课前一小时 后不可以报名
+                disabled={!isBeforeOneHour}
+              >
+                报名
+              </button>
+            ) : (
+              <button
+                className={isBeforeOneHour ? 'ft_btn dan' : 'ft_btn disabled'}
+                onClick={handleSignup}
+                //上课前一小时 后不可以退选
+                disabled={!isBeforeOneHour}
+              >
+                退选
+              </button>
             )}
-            handleSignup={handleSignup}
-          />
+          </>
         )}
       </div>
     </div>
