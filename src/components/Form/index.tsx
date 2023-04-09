@@ -8,7 +8,7 @@ import { FormComProps } from '../PropInterfaces';
 export default function FormCom(props: FormComProps) {
   const { onFinish, confirmNeed, option, link } = props;
   const returnInit = () => {
-    window.location.href = '/login';
+    window.location.href = '/';
   };
 
   return (
