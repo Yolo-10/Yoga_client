@@ -31,6 +31,7 @@ instance.interceptors.response.use(
     switch (errRes.status) {
       case 401:
         jwt.removeToken();
+        window.location.href = '/login';
         break;
       case 666:
         message.error(error.response.data.message);

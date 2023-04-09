@@ -4,8 +4,21 @@ import { useEffect, useState } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { API_ADD_DEFAULT, API_DEL_DEF, post } from '@/constant/api';
-import { ItemProps } from '../PropInterfaces';
 import './index.less';
+
+export interface userBlackInfo {
+  u_id: number;
+  u_name: string;
+  time: string;
+  times: number;
+}
+
+export interface ItemProps {
+  u_item: userBlackInfo;
+  c_id: number;
+  isClassEnd: boolean;
+  reduceRealP: Function;
+}
 
 export default function Item(props: ItemProps) {
   const {

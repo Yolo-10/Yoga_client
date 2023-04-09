@@ -1,4 +1,4 @@
-const TOKEN_KEY = 'yoga_token';
+import { TOKEN_KEY } from '@/constant/config';
 
 export const getToken = () => {
   return window.localStorage.getItem(TOKEN_KEY);

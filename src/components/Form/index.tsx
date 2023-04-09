@@ -1,8 +1,17 @@
 import { Link } from 'umi';
 import { Button, Form, Input } from 'antd';
 import { Svg } from '@/components';
-import { FormComProps } from '../PropInterfaces';
 import './index.less';
+
+export interface FormComProps {
+  onFinish: Function;
+  confirmNeed: boolean;
+  option: string;
+  link: {
+    src: string;
+    str: string;
+  };
+}
 
 export default function FormCom(props: FormComProps) {
   const { onFinish, confirmNeed, option, link } = props;

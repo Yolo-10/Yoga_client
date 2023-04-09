@@ -13,8 +13,13 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { API_ADD_CLASS, post } from '@/constant/api';
-import { addFormProps } from '../PropInterfaces';
 import './index.less';
+
+export interface addFormProps {
+  canAdd: boolean;
+  choseDay: string;
+  setIsAdd: Function;
+}
 
 export default function AddForm(props: addFormProps) {
   const {

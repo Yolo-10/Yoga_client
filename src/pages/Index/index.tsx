@@ -6,9 +6,25 @@ import type { Moment } from 'moment';
 import moment from 'moment';
 import { API_DAY_CLASS, API_MON_CLASS, get } from '@/constant/api';
 import { AddForm, Svg } from '@/components';
-import { calSelectProps, classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
 import './index.less';
+
+export interface calSelectProps {
+  value: Moment;
+  onChange: Function;
+}
+
+export interface basicClassInfo {
+  time: string;
+  place: string;
+  c_name: string;
+}
+
+export interface classInfo extends basicClassInfo {
+  c_id: number;
+  p_limit: number;
+  num?: number;
+}
 
 const CalSelect = ({ value, onChange }: calSelectProps) => {
   const start = 0;
