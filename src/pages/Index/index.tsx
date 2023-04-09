@@ -10,7 +10,7 @@ import { classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
 import './index.less';
 
-const IndexPage = () => {
+export default function IndexPage() {
   const { confirm } = Modal;
   const [canAdd, setCanAdd] = useState(true);
   const { setInitialState } = useModel('@@initialState');
@@ -133,7 +133,6 @@ const IndexPage = () => {
       </div>
     </div>
   );
-};
+}
 
 IndexPage.title = 'Home Page';
-export default IndexPage;

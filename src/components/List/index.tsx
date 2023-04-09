@@ -13,8 +13,8 @@ export default function List({
     <div>
       <ul className="list_hd">
         <li>学员</li>
-        {u_type ? <li>缺席</li> : null}
-        {u_type ? <li>缺席次数</li> : null}
+        {u_type && <li>缺席</li>}
+        {u_type && <li>缺席次数</li>}
       </ul>
       <div className="list_bd">
         {users?.map((u_item, i) => (

@@ -1,8 +1,7 @@
-import React from 'react';
 import { message } from 'antd';
 import { API_REGISTER, post } from '@/constant/api';
-import './index.less';
 import FormCom from '@/components/Form';
+import './index.less';
 
 export default function Register() {
   const onFinish = async (values: {

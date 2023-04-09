@@ -16,7 +16,7 @@ import { API_ADD_CLASS, post } from '@/constant/api';
 import { addFormProps } from '../PropInterfaces';
 import './index.less';
 
-const AddForm = (props: addFormProps) => {
+export default function AddForm(props: addFormProps) {
   const {
     initialState: { userInfo },
   } = useModel('@@initialState');
@@ -25,11 +25,16 @@ const AddForm = (props: addFormProps) => {
   const [form] = Form.useForm();
 
   const showDrawer = () => {
-    canAdd ? (setVisible(true), setIsAdd(false)) : null;
+    if (canAdd) {
+      setVisible(true);
+      setIsAdd(false);
+    }
   };
+
   const onClose = () => {
     setVisible(false);
   };
+
   const onFinish = async () => {
     const { c_name, began_time, time_step, place, p_limit } =
       form.getFieldsValue();
@@ -43,20 +48,21 @@ const AddForm = (props: addFormProps) => {
       end_time.format('HH:mm');
 
     //当前已过开课时间
-    moment().isAfter(
-      moment(choseDay + ' ' + began_time.format('HH:mm')),
-      'minutes',
-    )
-      ? message.error('上课时间早于当前')
-      : //发送请求
-        await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(
-          (res) => {
-            setVisible(false);
-            message.success('添加成功');
-            form.resetFields();
-            setIsAdd(true);
-          },
-        );
+    if (
+      moment().isAfter(
+        moment(choseDay + ' ' + began_time.format('HH:mm')),
+        'minutes',
+      )
+    ) {
+      message.error('上课时间早于当前');
+    } else {
+      await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(() => {
+        setVisible(false);
+        message.success('添加成功');
+        form.resetFields();
+        setIsAdd(true);
+      });
+    }
   };
 
   // 加减事件
@@ -86,9 +92,7 @@ const AddForm = (props: addFormProps) => {
 
   return (
     //不是管理员,无权添加
-    userInfo?.u_type != 0 ? (
-      <></>
-    ) : (
+    userInfo?.u_type == 0 && (
       <div>
         <Button
           className={canAdd ? 'add_icon' : 'add_icon cannot_add'}
@@ -119,8 +123,6 @@ const AddForm = (props: addFormProps) => {
               <Form.Item name="c_name" label="" rules={[{ required: true }]}>
                 <Radio.Group buttonStyle="solid">
                   <Radio.Button value="yoga">瑜伽</Radio.Button>
-                  {/* <Radio.Button value="go">围棋</Radio.Button>
-                  <Radio.Button value="badminton">羽毛球</Radio.Button> */}
                 </Radio.Group>
               </Form.Item>
             </Col>
@@ -189,6 +191,4 @@ const AddForm = (props: addFormProps) => {
       </div>
     )
   );
-};
-
-export default AddForm;
+}

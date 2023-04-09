@@ -1,4 +1,3 @@
-import React from 'react';
 import spr from '/public/static/sprite_normal.svg';
 
 const Svg = ({ id = '', size = 0, color = '#eee', sprite = spr }) => (

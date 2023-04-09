@@ -1,12 +1,11 @@
-import React from 'react';
 import { useModel } from 'umi';
 import { message } from 'antd';
 import { get, API_LOGIN } from '@/constant/api';
-import jwt, { saveToken } from '@/util/token';
+import jwt from '@/util/token';
 import './index.less';
 import FormCom from '@/components/Form';
 
-function Login() {
+export default function Login() {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const onFinish = async (values: { u_id: number; password: string }) => {
@@ -29,5 +28,3 @@ function Login() {
     />
   );
 }
-
-export default Login;

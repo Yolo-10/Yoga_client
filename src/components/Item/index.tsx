@@ -57,7 +57,7 @@ export default function Item(props: ItemProps) {
 
   useEffect(() => {
     //如果报名-违规两边联查中违规表中有记录，就是已经加入黑名单的了。
-    time ? setBlacklist(true) : null;
+    if (time) setBlacklist(true);
     setCnt(times);
   }, []);
 
@@ -67,7 +67,7 @@ export default function Item(props: ItemProps) {
     <ul className={blacklist && isClassEnd ? 'list_item red' : 'list_item'}>
       <li>{u_name}</li>
       {/* 是否禁用：课程未结束或已加黑名单；选中就加进黑名单 */}
-      {userInfo?.u_type == 0 ? (
+      {userInfo?.u_type == 0 && (
         <li>
           <Switch
             disabled={!isClassEnd}
@@ -75,8 +75,8 @@ export default function Item(props: ItemProps) {
             onClick={blacklist ? delDef : showConfirm}
           />
         </li>
-      ) : null}
-      {userInfo?.u_type == 0 ? <li>{cnt}</li> : null}
+      )}
+      {userInfo?.u_type == 0 && <li>{cnt}</li>}
     </ul>
   );
 }

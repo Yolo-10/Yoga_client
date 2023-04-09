@@ -1,9 +1,8 @@
-import React from 'react';
 import { Link } from 'umi';
 import { Button, Form, Input } from 'antd';
 import { Svg } from '@/components';
-import './index.less';
 import { FormComProps } from '../PropInterfaces';
+import './index.less';
 
 export default function FormCom(props: FormComProps) {
   const { onFinish, confirmNeed, option, link } = props;
