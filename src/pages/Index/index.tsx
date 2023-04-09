@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useHistory, observer, inject } from 'umi';
+import { Link, observer, inject } from 'umi';
 import { Calendar, message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import type { Moment } from 'moment';
 import moment from 'moment';
 import { API_DAY_CLASS, API_MON_CLASS, get } from '@/constant/api';
-import { AddForm, Svg, Header, CalSelect, DateCell } from '@/components';
+import { AddForm, Svg, Header, CalSelect } from '@/components';
 import { classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
 import './index.less';
 
 const IndexPage = ({ index }) => {
   const store = index;
+  console.log(store);
   const { confirm } = Modal;
-  const history = useHistory();
   const [canAdd, setCanAdd] = useState(true);
   const [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
   const [choseMonth, setChoseMonth] = useState(moment().format('YYYY-MM'));
@@ -22,7 +22,7 @@ const IndexPage = ({ index }) => {
   const [todayClassArr, setTodayClassArr] = useState([]);
 
   //弹出确认退出账号框
-  const showConfirm = () => {
+  const doConfirm = () => {
     confirm({
       title: `确认退出账号吗? `,
       icon: <ExclamationCircleOutlined />,
@@ -38,10 +38,9 @@ const IndexPage = ({ index }) => {
   const userLogin = () => {
     let token = jwt.getToken();
     if (token) {
-      //退出账号
-      showConfirm();
+      doConfirm();
     } else {
-      history.push('/login');
+      // window.location.href = '/login';
     }
   };
 
@@ -66,34 +65,21 @@ const IndexPage = ({ index }) => {
   //获取某月的课程信息
   const getMonClass = async (month: string) => {
     await get(API_MON_CLASS, { Mon: month }).then((res) => {
-      if (res.status === 1) {
-        setMonClassArr(res.data);
-      }
+      setMonClassArr(res.data);
     });
   };
 
   //获取某天的课程信息---当天
   const getTodayClass = async (day: string) => {
     await get(API_DAY_CLASS, { Today: day }).then((res) => {
-      if (res.status === 1) {
-        setTodayClassArr(res.data);
-      }
+      setTodayClassArr(res.data);
     });
   };
 
-  //日历课程动态监听
   useEffect(() => {
     getMonClass(choseMonth);
-  }, [choseMonth, isAdd]);
-
-  //头部信息
-  useEffect(() => {
     getTodayClass(moment().format('YYYY-MM-DD'));
-  }, [isAdd]);
-
-  // useEffect(()=>{
-  //   console.log('环境变量：', process.env, process.env.UMI_ENV);
-  // },[]);
+  }, [choseMonth, isAdd]);
 
   return (
     <div className="page_init">
@@ -126,9 +112,21 @@ const IndexPage = ({ index }) => {
             </div>
           )}
           onPanelChange={onPanelChange}
-          dateCellRender={(value: Moment) => (
-            <DateCell monClassArr={monClassArr} value={value} />
-          )}
+          dateCellRender={(value: Moment) =>
+            monClassArr.map(
+              (item: classInfo) =>
+                value.isSame(moment(item.time, 'YYYY-MM-DD'), 'day') && (
+                  <Link
+                    className="item"
+                    key={item.c_id}
+                    to={`/dea?c_id=${item.c_id}&c_name=${item.c_name}`}
+                  >
+                    <img src={'static/' + item.c_name + '.svg'} alt="课程" />
+                    <div className="signupNum">{item.num ? item.num : 0}</div>
+                  </Link>
+                ),
+            )
+          }
         />
       </div>
     </div>

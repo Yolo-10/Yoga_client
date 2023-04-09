@@ -14,7 +14,6 @@ export default defineConfig({
       UMI_ENV: 'dev',
     },
   },
-  history: { type: 'hash' },
   routes: [
     { path: '/', component: '@/pages/Index' },
     { path: '/dea', component: '@/pages/dea', wrappers: ['@/components/Auth'] },

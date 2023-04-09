@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { history, observer, inject } from 'umi';
+import { useHistory, observer, inject } from 'umi';
 import { LeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import {
@@ -14,12 +14,12 @@ import { List, Header, SignupBtn } from '@/components';
 import './index.less';
 
 function dea(props: any) {
+  const history = useHistory();
   const { curUser } = props.index;
   const { c_id, c_name } = props.location.query;
 
   const [users, setUsers] = useState([]);
   const [signupTime, setSignupTime] = useState('');
-  //初始假设课程结束
   const [isClassEnd, setIsClassEnd] = useState(true);
   const [realP, setRealP] = useState(0);
   const [item, setItem] = useState({
@@ -42,29 +42,25 @@ function dea(props: any) {
   //请求课程头部信息
   const getClassById = async () => {
     get(API_CLASS_BY_ID, { c_id: c_id }).then((res) => {
-      res.status == 1 ? setItem(res.data[0]) : null;
+      setItem(res.data[0]);
     });
   };
   // 初始页面——请求报名列表（判定是否已报名该课程）
   const getSignupUsersInit = () => {
+    console.log(curUser);
     get(API_SIGN_UP_USERS, { c_id }).then((res) => {
-      if (res.status == 1) {
-        // 如果返回的报名列表中存在本用户，标记为已经报名
-        let thisUserSignup = res.data.find(
-          (obj: { u_id: number }) => obj.u_id == curUser.u_id,
-        );
-        thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
-        setUsers(res.data);
-      }
+      // 如果返回的报名列表中存在本用户，标记为已经报名
+      let thisUserSignup = res.data.find(
+        (obj: { u_id: number }) => obj.u_id == curUser.u_id,
+      );
+      thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
+      setUsers(res.data);
     });
   };
   // 请求报名列表（直接获取所有报名列表，渲染）
   const getSignupUsers = () => {
     get(API_SIGN_UP_USERS, { c_id: c_id }).then((res) => {
-      if (res.status == 1) {
-        setUsers(res.data);
-        // console.log(res.data);
-      }
+      setUsers(res.data);
     });
   };
   //报名该课程

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useModel, Link } from 'umi';
+import { Link } from 'umi';
 import { Button, Form, Input } from 'antd';
 import { Svg } from '@/components';
 import './index.less';
@@ -7,10 +7,8 @@ import { FormComProps } from '../PropInterfaces';
 
 export default function FormCom(props: FormComProps) {
   const { onFinish, confirmNeed, option, link } = props;
-  const history = useHistory();
-
   const returnInit = () => {
-    history.push('/');
+    window.location.href = '/login';
   };
 
   return (

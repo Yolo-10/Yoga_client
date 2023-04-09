@@ -1,8 +1,5 @@
-import './AddForm';
-
 export { default as Header } from './Header';
 export { default as CalSelect } from './CalSelect';
-export { default as DateCell } from './DateCell';
 export { default as AddForm } from './AddForm';
 export { default as SignupBtn } from './SignupBtn';
 export { default as List } from './List';

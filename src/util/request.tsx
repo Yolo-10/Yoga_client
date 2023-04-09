@@ -1,6 +1,7 @@
 import axios from 'axios';
 import jwt from '@/util/token';
 import { BASE_URL } from '@/constant/config';
+import { message } from 'antd';
 
 const instance = axios.create({
   timeout: 20000,
@@ -27,9 +28,15 @@ instance.interceptors.response.use(
   },
   (error) => {
     const errRes = error.response;
-    if (errRes.status === 401) {
-      jwt.removeToken();
-      window.location.href = '/login';
+    switch (errRes.status) {
+      case 401:
+        jwt.removeToken();
+        break;
+      case 666:
+        message.error(error.response.data.message);
+        break;
+      default:
+        message.error(error.message);
     }
     return Promise.reject(error);
   },

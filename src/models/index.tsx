@@ -4,16 +4,18 @@ import decode from 'jwt-decode';
 
 export class Index {
   @observable
-  curUser = undefined;
+  curUser = {};
 
   @action saveCurUser(e) {
+    console.log(decode(e));
     this.curUser = decode(e);
+    console.log('111', this.curUser);
     saveToken(e);
   }
 
   @action
   async removeCurUser() {
-    this.curUser = undefined;
-    removeToken();
+    // this.curUser = {};
+    // removeToken();
   }
 }

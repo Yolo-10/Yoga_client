@@ -1,12 +1,10 @@
 import React from 'react';
-import { useHistory } from 'umi';
 import { message } from 'antd';
 import { API_REGISTER, post } from '@/constant/api';
 import './index.less';
 import FormCom from '@/components/Form';
 
 export default function Register() {
-  const history = useHistory();
   const onFinish = async (values: {
     u_id: number;
     password: string;
@@ -17,12 +15,10 @@ export default function Register() {
       u_name: values.u_name,
       password: values.password,
     }).then((res) => {
-      if (res.status === 0) {
-        message.success(`${res.message},跳转至登录页`);
-        setTimeout(() => {
-          history.push('/login'), 2;
-        });
-      } else message.error(res.message);
+      message.success(`${res.message},跳转至登录页`);
+      setTimeout(() => {
+        (window.location.href = '/login'), 2;
+      });
     });
   };
 

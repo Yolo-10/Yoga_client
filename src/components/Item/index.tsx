@@ -15,7 +15,7 @@ function Item(props: ItemProps) {
     isClassEnd,
     reduceRealP,
   } = props;
-  const [blacklist, setblacklist] = useState(false);
+  const [blacklist, setBlacklist] = useState(false);
   const [cnt, setCnt] = useState(0);
   const { confirm } = Modal;
 
@@ -30,12 +30,10 @@ function Item(props: ItemProps) {
           c_id,
           time: moment().format('YYYY:MM:DD HH:mm:ss'),
         }).then((res) => {
-          if (res.status == 1) {
-            setblacklist(!blacklist);
-            //页面缺席次数展示 增加+1
-            setCnt(cnt + 1);
-            reduceRealP(1, 'reduce');
-          }
+          setBlacklist(!blacklist);
+          //页面缺席次数展示 增加+1
+          setCnt(cnt + 1);
+          reduceRealP(1, 'reduce');
         });
       },
       onCancel() {
@@ -48,7 +46,7 @@ function Item(props: ItemProps) {
   const delDef = () => {
     post(API_DEL_DEF, { c_id, u_id }).then((res) => {
       if (res.data.affectedRows > 0) {
-        setblacklist(!blacklist);
+        setBlacklist(!blacklist);
         setCnt(cnt - 1);
         reduceRealP(1, 'add');
       }
@@ -57,7 +55,7 @@ function Item(props: ItemProps) {
 
   useEffect(() => {
     //如果报名-违规两边联查中违规表中有记录，就是已经加入黑名单的了。
-    time ? setblacklist(true) : null;
+    time ? setBlacklist(true) : null;
     setCnt(times);
   }, []);
 

@@ -49,12 +49,10 @@ const AddForm = (props: any) => {
       : //发送请求
         await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(
           (res) => {
-            if (res.status === 1) {
-              setVisible(false);
-              message.success('添加成功');
-              form.resetFields();
-              setIsAdd(true);
-            }
+            setVisible(false);
+            message.success('添加成功');
+            form.resetFields();
+            setIsAdd(true);
           },
         );
   };
