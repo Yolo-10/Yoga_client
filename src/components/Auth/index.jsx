@@ -7,7 +7,7 @@ export default function Auth(props) {
     const token = getToken();
     console.log(token);
     if (!token) {
-      // window.location.href = '/login';
+      window.location.href = '/login';
     }
   }, []);
   return <div>{props.children}</div>;

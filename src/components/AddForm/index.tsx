@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { observer, inject } from 'umi';
+import { useModel } from 'umi';
 import {
   Button,
   Radio,
@@ -16,8 +16,10 @@ import { API_ADD_CLASS, post } from '@/constant/api';
 import { addFormProps } from '../PropInterfaces';
 import './index.less';
 
-const AddForm = (props: any) => {
-  const { curUser } = props.index;
+const AddForm = (props: addFormProps) => {
+  const {
+    initialState: { userInfo },
+  } = useModel('@@initialState');
   const { canAdd, choseDay, setIsAdd } = props;
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
@@ -84,7 +86,7 @@ const AddForm = (props: any) => {
 
   return (
     //不是管理员,无权添加
-    curUser?.u_type != 0 ? (
+    userInfo?.u_type != 0 ? (
       <></>
     ) : (
       <div>
@@ -189,4 +191,4 @@ const AddForm = (props: any) => {
   );
 };
 
-export default inject('index')(observer(AddForm));
+export default AddForm;

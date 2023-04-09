@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHistory, observer, inject } from 'umi';
+import { useHistory, useModel } from 'umi';
 import { LeftOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import {
@@ -13,9 +13,11 @@ import {
 import { List, Header, SignupBtn } from '@/components';
 import './index.less';
 
-function dea(props: any) {
+export default function dea(props: any) {
   const history = useHistory();
-  const { curUser } = props.index;
+  const {
+    initialState: { userInfo },
+  } = useModel('@@initialState');
   const { c_id, c_name } = props.location.query;
 
   const [users, setUsers] = useState([]);
@@ -47,11 +49,10 @@ function dea(props: any) {
   };
   // 初始页面——请求报名列表（判定是否已报名该课程）
   const getSignupUsersInit = () => {
-    console.log(curUser);
     get(API_SIGN_UP_USERS, { c_id }).then((res) => {
       // 如果返回的报名列表中存在本用户，标记为已经报名
       let thisUserSignup = res.data.find(
-        (obj: { u_id: number }) => obj.u_id == curUser.u_id,
+        (obj: { u_id: number }) => obj.u_id == userInfo.u_id,
       );
       thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
       setUsers(res.data);
@@ -66,7 +67,7 @@ function dea(props: any) {
   //报名该课程
   const signupClass = async () => {
     let { c_id } = item,
-      { u_id, u_name } = curUser,
+      { u_id, u_name } = userInfo,
       appo_time = moment().format('YYYY-MM-DD HH:mm:ss');
     post(API_SIGN_UP, { c_id, c_name, u_id, u_name, appo_time }).then((res) => {
       if (res.data.affectedRows > 0) {
@@ -80,7 +81,7 @@ function dea(props: any) {
   //退选该课程
   const delSignupClass = async () => {
     let { c_id } = item,
-      { u_id } = curUser;
+      { u_id } = userInfo;
     post(API_DEL_SIGN_UP, { c_id, u_id }).then((res) => {
       if (res.data.affectedRows > 0) {
         //不报名了
@@ -149,7 +150,7 @@ function dea(props: any) {
         </div>
 
         <List
-          u_type={curUser?.u_type == 0}
+          u_type={userInfo?.u_type == 0}
           users={users}
           c_id={item.c_id}
           isClassEnd={isClassEnd}
@@ -166,12 +167,12 @@ function dea(props: any) {
         )}
 
         {/* 管理员、课程未结束 */}
-        {isClassEnd || curUser?.u_type == 0 ? null : (
+        {isClassEnd || userInfo?.u_type == 0 ? null : (
           <span className="m-bt-notice">课前1小时 后无法报名或退选课程</span>
         )}
 
         {/* 登录且是学员且课程未结束 */}
-        {curUser?.u_type == 0 || isClassEnd ? null : (
+        {userInfo?.u_type == 0 || isClassEnd ? null : (
           <SignupBtn
             p_limit={item.p_limit}
             u_len={users.length}
@@ -186,5 +187,3 @@ function dea(props: any) {
     </div>
   );
 }
-
-export default inject('index')(observer(dea));

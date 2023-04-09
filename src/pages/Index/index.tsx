@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, observer, inject } from 'umi';
+import { Link, useModel } from 'umi';
 import { Calendar, message, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import type { Moment } from 'moment';
@@ -10,11 +10,10 @@ import { classInfo } from '@/components/PropInterfaces';
 import jwt from '@/util/token';
 import './index.less';
 
-const IndexPage = ({ index }) => {
-  const store = index;
-  console.log(store);
+const IndexPage = () => {
   const { confirm } = Modal;
   const [canAdd, setCanAdd] = useState(true);
+  const { setInitialState } = useModel('@@initialState');
   const [choseDay, setChoseDay] = useState(moment().format('YYYY-MM-DD'));
   const [choseMonth, setChoseMonth] = useState(moment().format('YYYY-MM'));
   const [isAdd, setIsAdd] = useState(false);
@@ -27,7 +26,10 @@ const IndexPage = ({ index }) => {
       title: `确认退出账号吗? `,
       icon: <ExclamationCircleOutlined />,
       onOk() {
-        store.removeCurUser();
+        jwt.removeToken();
+        setInitialState({
+          userInfo: null,
+        });
         window.location.href = '/';
         message.success('退出账号');
       },
@@ -40,7 +42,7 @@ const IndexPage = ({ index }) => {
     if (token) {
       doConfirm();
     } else {
-      // window.location.href = '/login';
+      window.location.href = '/login';
     }
   };
 
@@ -134,4 +136,4 @@ const IndexPage = ({ index }) => {
 };
 
 IndexPage.title = 'Home Page';
-export default inject('index')(observer(IndexPage));
+export default IndexPage;

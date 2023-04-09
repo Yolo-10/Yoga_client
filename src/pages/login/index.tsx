@@ -1,22 +1,22 @@
 import React from 'react';
-import { observer, inject } from 'umi';
+import { useModel } from 'umi';
 import { message } from 'antd';
 import { get, API_LOGIN } from '@/constant/api';
+import jwt, { saveToken } from '@/util/token';
 import './index.less';
 import FormCom from '@/components/Form';
 
-function Login({ index }) {
-  const store = index;
+function Login() {
+  const { initialState, setInitialState } = useModel('@@initialState');
 
   const onFinish = async (values: { u_id: number; password: string }) => {
     await get(API_LOGIN, {
       u_id: values.u_id,
       password: values.password,
     }).then((res) => {
-      store.saveCurUser(res.data);
-      console.log(333, store);
+      jwt.saveToken(res.data);
       message.success('登录成功');
-      // setTimeout(() => window.location.href = '/', 1000);
+      setTimeout(() => (window.location.href = '/'), 1000);
     });
   };
 
@@ -30,4 +30,4 @@ function Login({ index }) {
   );
 }
 
-export default inject('index')(observer(Login));
+export default Login;
