@@ -22,7 +22,7 @@ export default function dea(props: any) {
   const { c_id, c_name } = props.location.query;
 
   const [users, setUsers] = useState([]);
-  const [signupTime, setSignupTime] = useState('');
+  const [isSign, setIsSign] = useState(false);
   const [isClassEnd, setIsClassEnd] = useState(true);
   const [realP, setRealP] = useState(0);
   const [item, setItem] = useState({
@@ -40,7 +40,7 @@ export default function dea(props: any) {
   //报名退选事件
   const handleSignup = () => {
     //报名/退选课程
-    signupTime.length == 0 ? signupClass() : delSignupClass();
+    !isSign ? signupClass() : delSignupClass();
   };
   //请求课程头部信息
   const getClassById = async () => {
@@ -55,7 +55,7 @@ export default function dea(props: any) {
       let thisUserSignup = res.data.find(
         (obj: { u_id: number }) => obj.u_id == userInfo.u_id,
       );
-      thisUserSignup ? setSignupTime(thisUserSignup.appo_time) : null;
+      setIsSign(Boolean(thisUserSignup));
       setUsers(res.data);
     });
   };
@@ -73,7 +73,7 @@ export default function dea(props: any) {
     post(API_SIGN_UP, { c_id, c_name, u_id, u_name, appo_time }).then((res) => {
       if (res.data.affectedRows > 0) {
         //报名了
-        setSignupTime(appo_time);
+        setIsSign(true);
         //重新获取报名列表
         getSignupUsers();
       }
@@ -86,7 +86,7 @@ export default function dea(props: any) {
     post(API_DEL_SIGN_UP, { c_id, u_id }).then((res) => {
       if (res.data.affectedRows > 0) {
         //不报名了
-        setSignupTime('');
+        setIsSign(false);
         //重新获取报名列表
         getSignupUsers();
       }
@@ -192,11 +192,11 @@ export default function dea(props: any) {
         {/* 登录且是学员且课程未结束 */}
         {!(userInfo?.u_type == 0 || isClassEnd) && (
           <>
-            {item.p_limit <= users.length && signupTime.length == 0 ? (
+            {item.p_limit <= users.length && !isSign ? (
               <button className="ft_btn disabled" disabled={true}>
                 报名人数已满
               </button>
-            ) : signupTime.length == 0 ? (
+            ) : !isSign ? (
               <button
                 className={isBeforeOneHour ? 'ft_btn' : 'ft_btn disabled'}
                 onClick={handleSignup}
