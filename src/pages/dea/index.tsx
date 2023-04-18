@@ -113,6 +113,7 @@ export default function dea(props: any) {
     //检测课程是否已经结束
     let classEndTime =
       item.time.substring(0, 10) + ' ' + item.time.substring(17, 22);
+    // console.log(moment(classEndTime, moment.ISO_8601).isAfter(moment()))
     if (moment(classEndTime, moment.ISO_8601).isAfter(moment())) {
       setIsClassEnd(false);
     }
@@ -143,6 +144,7 @@ export default function dea(props: any) {
           showIcon
         />
         <div className="hd_des">
+          {!isClassEnd && <div>剩余名额：{item.p_limit - users?.length}</div>}
           <div>报名人数：{users?.length || 0}</div>
           <div>
             人均学费：
