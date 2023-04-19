@@ -125,14 +125,14 @@ export default function IndexPage() {
 
   //选择日期发生变化的回调
   const calChange = (value: Moment) => {
+    //设置添加课程的默认日期
+    setChoseDay(value.format('YYYY-MM-DD'));
     //设置添加按钮的开启
     if (value.isSame(moment(), 'day')) {
       setCanAdd(true);
       return;
     }
     value.isAfter(moment()) ? setCanAdd(true) : setCanAdd(false);
-    //设置添加课程的默认日期
-    setChoseDay(value.format('YYYY-MM-DD'));
   };
 
   //月历面板发生变化的回调

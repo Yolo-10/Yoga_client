@@ -61,12 +61,13 @@ export default function AddForm(props: addFormProps) {
     ) {
       message.error('上课时间早于当前');
     } else {
-      await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(() => {
-        setVisible(false);
-        message.success('添加成功');
-        form.resetFields();
-        setIsAdd(true);
-      });
+      console.log(time);
+      // await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(() => {
+      //   setVisible(false);
+      //   message.success('添加成功');
+      //   form.resetFields();
+      //   setIsAdd(true);
+      // });
     }
   };
 
@@ -116,6 +117,7 @@ export default function AddForm(props: addFormProps) {
             layout="vertical"
             form={form}
             hideRequiredMark
+            onFinish={onFinish}
             initialValues={{
               c_name: 'yoga',
               place: '师生活动中心228',
@@ -132,7 +134,11 @@ export default function AddForm(props: addFormProps) {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item label="上课时间" name="began_time">
+              <Form.Item
+                label="上课时间"
+                name="began_time"
+                rules={[{ required: true }]}
+              >
                 <TimePicker
                   minuteStep={30}
                   format={'HH:mm'}
@@ -178,20 +184,21 @@ export default function AddForm(props: addFormProps) {
                 />
               </Form.Item>
             </Col>
+            <Col span={24}>
+              <div className="btn_ope">
+                <Button onClick={onClose} style={{ float: 'left' }}>
+                  取消
+                </Button>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  style={{ float: 'right', margin: '0 0 0 20px' }}
+                >
+                  提交
+                </Button>
+              </div>
+            </Col>
           </Form>
-
-          <div className="btn_ope">
-            <Button onClick={onClose} style={{ float: 'left' }}>
-              取消
-            </Button>
-            <Button
-              onClick={onFinish}
-              type="primary"
-              style={{ float: 'right', margin: '0 0 0 20px' }}
-            >
-              提交
-            </Button>
-          </div>
         </Drawer>
       </div>
     )
