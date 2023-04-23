@@ -61,13 +61,12 @@ export default function AddForm(props: addFormProps) {
     ) {
       message.error('上课时间早于当前');
     } else {
-      console.log(time);
-      // await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(() => {
-      //   setVisible(false);
-      //   message.success('添加成功');
-      //   form.resetFields();
-      //   setIsAdd(true);
-      // });
+      await post(API_ADD_CLASS, { c_name, time, place, p_limit }).then(() => {
+        setVisible(false);
+        message.success('添加成功');
+        form.resetFields();
+        setIsAdd(true);
+      });
     }
   };
 
